@@ -1,7 +1,7 @@
 package io.github.com.lucasmartinsvieira.trackr.controllers;
 
-import io.github.com.lucasmartinsvieira.trackr.domain.user.AuthenticationDTO;
-import io.github.com.lucasmartinsvieira.trackr.domain.user.RegisterDTO;
+import io.github.com.lucasmartinsvieira.trackr.domain.user.AuthenticationUserDTO;
+import io.github.com.lucasmartinsvieira.trackr.domain.user.RegisterUserDTO;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -25,14 +25,14 @@ public class AuthenticationController {
     private UserRepository userRepository;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto) {
+    public ResponseEntity login(@RequestBody @Valid AuthenticationUserDTO dto) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO dto) {
+    public ResponseEntity register(@RequestBody @Valid RegisterUserDTO dto) {
         System.out.println(this.userRepository.findByEmail(dto.email()));
         if (this.userRepository.findByEmail(dto.email()) != null) return ResponseEntity.badRequest().build();
 
