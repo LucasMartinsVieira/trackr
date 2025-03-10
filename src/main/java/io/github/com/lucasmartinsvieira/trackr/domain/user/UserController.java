@@ -1,11 +1,11 @@
-package io.github.com.lucasmartinsvieira.trackr.user;
+package io.github.com.lucasmartinsvieira.trackr.domain.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired

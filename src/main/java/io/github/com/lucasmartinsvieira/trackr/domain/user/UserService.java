@@ -1,4 +1,4 @@
-package io.github.com.lucasmartinsvieira.trackr.user;
+package io.github.com.lucasmartinsvieira.trackr.domain.user;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
