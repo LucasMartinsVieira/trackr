@@ -1,9 +1,11 @@
 package io.github.com.lucasmartinsvieira.trackr.controllers;
 
 import io.github.com.lucasmartinsvieira.trackr.domain.user.AuthenticationUserDTO;
+import io.github.com.lucasmartinsvieira.trackr.domain.user.LoginResponseDTO;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.RegisterUserDTO;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.repositories.UserRepository;
+import io.github.com.lucasmartinsvieira.trackr.services.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +24,18 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationUserDTO dto) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
-        return ResponseEntity.ok().build();
+
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
