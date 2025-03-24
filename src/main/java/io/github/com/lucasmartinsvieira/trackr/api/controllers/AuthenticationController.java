@@ -1,5 +1,9 @@
-package io.github.com.lucasmartinsvieira.trackr.controllers;
+package io.github.com.lucasmartinsvieira.trackr.api.controllers;
 
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.AuthenticatedUserResponseDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.AuthenticationUserRequestDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.LoginResponseDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.RegisterUserRequestDTO;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.*;
 import io.github.com.lucasmartinsvieira.trackr.repositories.UserRepository;
 import io.github.com.lucasmartinsvieira.trackr.services.TokenService;
@@ -30,7 +34,7 @@ public class AuthenticationController {
     private UserRepository userRepository;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationUserDTO dto) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationUserRequestDTO dto) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
@@ -39,7 +43,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterUserDTO dto) {
+    public ResponseEntity register(@RequestBody @Valid RegisterUserRequestDTO dto) {
         System.out.println(this.userRepository.findByEmail(dto.email()));
         if (this.userRepository.findByEmail(dto.email()) != null) return ResponseEntity.badRequest().build();
 
@@ -56,7 +60,7 @@ public class AuthenticationController {
             @ApiResponse(description = "Requisição efetuada com sucesso", responseCode = "200", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(description = "Authentication failed", responseCode = "403", content =  {@Content(schema = @Schema(hidden = true))})
     })
-    public ResponseEntity me(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(new AuthenticatedUserDTO(user.getId(), user.getName(), user.getEmail(), user.getRole()));
+    public ResponseEntity<AuthenticatedUserResponseDTO> me(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(new AuthenticatedUserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getRole()));
     }
 }
