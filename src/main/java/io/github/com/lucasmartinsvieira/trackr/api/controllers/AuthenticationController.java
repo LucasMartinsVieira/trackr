@@ -4,14 +4,16 @@ import io.github.com.lucasmartinsvieira.trackr.api.dtos.AuthenticatedUserRespons
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.AuthenticationUserRequestDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.LoginResponseDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.RegisterUserRequestDTO;
-import io.github.com.lucasmartinsvieira.trackr.domain.user.*;
+import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.repositories.UserRepository;
 import io.github.com.lucasmartinsvieira.trackr.services.TokenService;
+import io.github.com.lucasmartinsvieira.trackr.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+// TODO: Change autowired's for constructor dependency injection
 @RestController
 @RequestMapping("auth")
 public class AuthenticationController {
@@ -30,8 +33,12 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
+    // TODO: remove userRepository from here
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationUserRequestDTO dto) {
@@ -44,7 +51,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterUserRequestDTO dto) {
-        System.out.println(this.userRepository.findByEmail(dto.email()));
+        System.out.println(dto);
         if (this.userRepository.findByEmail(dto.email()) != null) return ResponseEntity.badRequest().build();
 
         String encriptedPassoword = new BCryptPasswordEncoder().encode(dto.password());
@@ -62,5 +69,13 @@ public class AuthenticationController {
     })
     public ResponseEntity<AuthenticatedUserResponseDTO> me(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(new AuthenticatedUserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getRole()));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @Transactional
+    public ResponseEntity<String> delete(@PathVariable String id) {
+        this.userService.deleteUser(id);
+
+        return ResponseEntity.ok("User deleted successfully");
     }
 }
