@@ -39,7 +39,6 @@ public class BookController {
     }
 
     @DeleteMapping("{id}")
-    @Transactional
     public ResponseEntity deleteBook(@PathVariable UUID id, @AuthenticationPrincipal User user) {
         this.bookService.deleteBook(id, user);
 

@@ -9,13 +9,13 @@ import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.UserRole;
 import io.github.com.lucasmartinsvieira.trackr.infra.exception.BookAccessDeniedException;
 import io.github.com.lucasmartinsvieira.trackr.infra.exception.BookNotFoundException;
+import io.github.com.lucasmartinsvieira.trackr.infra.exception.BookStatusNotChangeableException;
 import io.github.com.lucasmartinsvieira.trackr.repositories.BookRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,6 +36,7 @@ public class BookService {
         return this.bookRepository.findAll();
     }
 
+    @Transactional
     public void deleteBook(UUID id, User user) {
         var book = this.bookRepository.getReferenceById(id);
 
@@ -65,7 +66,6 @@ public class BookService {
             return bookRepository.save(book);
         }
 
-        // TODO: throw a exception
-        return null;
+        throw new BookStatusNotChangeableException("Book status can only be TO_READ or READING");
     }
 }

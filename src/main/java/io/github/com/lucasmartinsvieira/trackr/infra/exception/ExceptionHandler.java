@@ -10,4 +10,9 @@ public class ExceptionHandler {
     public ResponseEntity handleBookAccessDeniedExceptiona(BookAccessDeniedException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(BookStatusNotChangeableException.class)
+    public ResponseEntity handleBookStatusNotChangeable(BookStatusNotChangeableException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }
