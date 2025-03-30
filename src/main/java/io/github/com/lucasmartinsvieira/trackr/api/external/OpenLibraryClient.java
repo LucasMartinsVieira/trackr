@@ -1,5 +1,7 @@
-package io.github.com.lucasmartinsvieira.trackr.api.clients;
+package io.github.com.lucasmartinsvieira.trackr.api.external;
 
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySeachRequestDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchReponseDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -9,13 +11,13 @@ public class OpenLibraryClient {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String openLibraryApiBaseUrl = "https://openlibrary.org/";
 
-    public String searchBook(String query) {
+    public OpenLibrarySearchReponseDTO searchBook(OpenLibrarySeachRequestDTO dto) {
         String url = UriComponentsBuilder.fromUriString(openLibraryApiBaseUrl)
                 .path("search.json")
-                .queryParam("q", query)
+                .queryParam(buildQueryParam(dto.openLibrarySearchType()), dto.query())
                 .toUriString();
 
-        return restTemplate.getForObject(url, String.class);
+        return restTemplate.getForObject(url, OpenLibrarySearchReponseDTO.class);
     }
 
     public String searchEditions(String workId) {
@@ -34,5 +36,20 @@ public class OpenLibraryClient {
                 .toUriString();
 
         return restTemplate.getForObject(url, String.class);
+    }
+
+    private String buildQueryParam(OpenLibrarySearchType openLibrarySearchType) {
+        switch (openLibrarySearchType) {
+            case GENERAL:
+                return "q";
+            case ISBN:
+                return "isbn";
+            case AUTHOR:
+                return "author";
+            case TITLE:
+                return "title";
+            default:
+                return "q";
+        }
     }
 }
