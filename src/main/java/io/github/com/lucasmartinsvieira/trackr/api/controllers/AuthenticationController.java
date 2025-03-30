@@ -1,9 +1,9 @@
 package io.github.com.lucasmartinsvieira.trackr.api.controllers;
 
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.AuthenticatedUserResponseDTO;
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.AuthenticationUserRequestDTO;
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.LoginResponseDTO;
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.RegisterUserRequestDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.authentication.AuthenticatedUserResponseDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.authentication.AuthenticationUserRequestDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.authentication.LoginResponseDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.authentication.RegisterUserRequestDTO;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.repositories.UserRepository;
 import io.github.com.lucasmartinsvieira.trackr.services.TokenService;

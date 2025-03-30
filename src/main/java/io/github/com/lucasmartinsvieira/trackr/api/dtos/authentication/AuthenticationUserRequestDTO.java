@@ -1,4 +1,4 @@
-package io.github.com.lucasmartinsvieira.trackr.api.dtos;
+package io.github.com.lucasmartinsvieira.trackr.api.dtos.authentication;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

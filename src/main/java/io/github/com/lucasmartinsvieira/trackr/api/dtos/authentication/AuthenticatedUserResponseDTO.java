@@ -1,4 +1,4 @@
-package io.github.com.lucasmartinsvieira.trackr.api.dtos;
+package io.github.com.lucasmartinsvieira.trackr.api.dtos.authentication;
 
 import io.github.com.lucasmartinsvieira.trackr.domain.user.UserRole;
 
