@@ -25,7 +25,7 @@ public class Book {
     private UUID id;
 
     @Column(name = "openlibrary_id", unique = true, nullable = false, length = 20)
-    private String openLibraryuId;
+    private String openLibraryId;
 
     @Column(columnDefinition = "TEXT")
     private String title;
@@ -43,10 +43,10 @@ public class Book {
     @Column
     private String coverUrl;
 
-    @Column
+    @Column(name = "isbn_10")
     private String isbn10;
 
-    @Column
+    @Column(name = "isbn_13")
     private String isbn13;
 
     @Column
@@ -56,14 +56,16 @@ public class Book {
     @Column(columnDefinition = "jsonb")
     private List<String> publishers;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private BookStatus status = BookStatus.TO_READ;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private BookType type = BookType.PAPERBACK;
 
     @Column
-    private boolean loverd = false;
+    private boolean loved = false;
 
     @Column
     private BigDecimal userRating;
