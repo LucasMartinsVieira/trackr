@@ -1,6 +1,7 @@
 package io.github.com.lucasmartinsvieira.trackr.api.controllers;
 
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySeachRequestDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchReponseDTO;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.Book;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.services.BookService;
@@ -31,7 +32,7 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity searchForBook(@RequestBody @Valid OpenLibrarySeachRequestDTO dto) {
+    public ResponseEntity<OpenLibrarySearchReponseDTO> searchForBook(@RequestBody @Valid OpenLibrarySeachRequestDTO dto) {
         var books = this.bookService.searchBook(dto);
 
         return ResponseEntity.ok(books);
@@ -43,5 +44,12 @@ public class BookController {
         this.bookService.deleteBook(id, user);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/changeStatus/{id}")
+    public ResponseEntity changeBookStatus(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+        var book = this.bookService.changeBookStatus(id, user);
+
+        return ResponseEntity.ok(book);
     }
 }

@@ -76,4 +76,10 @@ public class Book {
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @Column
+    private LocalDate dateStarted;
+
+    @Column
+    private LocalDate dateFinished;
 }
