@@ -39,17 +39,11 @@ public class OpenLibraryClient {
     }
 
     private String buildQueryParam(OpenLibrarySearchType openLibrarySearchType) {
-        switch (openLibrarySearchType) {
-            case GENERAL:
-                return "q";
-            case ISBN:
-                return "isbn";
-            case AUTHOR:
-                return "author";
-            case TITLE:
-                return "title";
-            default:
-                return "q";
-        }
+        return switch (openLibrarySearchType) {
+            case GENERAL -> "q";
+            case ISBN -> "isbn";
+            case AUTHOR -> "author";
+            case TITLE -> "title";
+        };
     }
 }

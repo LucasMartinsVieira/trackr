@@ -8,6 +8,7 @@ import io.github.com.lucasmartinsvieira.trackr.repositories.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BookService {
@@ -25,5 +26,9 @@ public class BookService {
 
     public List<Book> findAll() {
         return this.bookRepository.findAll();
+    }
+
+    public void deleteBook(UUID id) {
+        this.bookRepository.deleteById(id);
     }
 }
