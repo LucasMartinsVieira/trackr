@@ -2,10 +2,12 @@ package io.github.com.lucasmartinsvieira.trackr.api.controllers;
 
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySeachRequestDTO;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.Book;
+import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.services.BookService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,8 +39,8 @@ public class BookController {
 
     @DeleteMapping("{id}")
     @Transactional
-    public ResponseEntity deleteBook(@PathVariable UUID id) {
-        this.bookService.deleteBook(id);
+    public ResponseEntity deleteBook(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+        this.bookService.deleteBook(id, user);
 
         return ResponseEntity.ok().build();
     }
