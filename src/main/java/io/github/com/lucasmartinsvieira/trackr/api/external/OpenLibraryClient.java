@@ -1,5 +1,6 @@
 package io.github.com.lucasmartinsvieira.trackr.api.external;
 
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibraryBookEntry;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySeachRequestDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchEditionsResponseDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchReponseDTO;
@@ -30,13 +31,13 @@ public class OpenLibraryClient {
         return restTemplate.getForObject(url, OpenLibrarySearchEditionsResponseDTO.class);
     }
 
-    public String getBookInfo(String bookId) {
+    public OpenLibraryBookEntry searchForEdition(String bookId) {
         String url = UriComponentsBuilder.fromUriString(openLibraryApiBaseUrl)
                 .path("/books/{bookId}.json")
                 .buildAndExpand(bookId)
                 .toUriString();
 
-        return restTemplate.getForObject(url, String.class);
+        return restTemplate.getForObject(url, OpenLibraryBookEntry.class);
     }
 
     private String buildQueryParam(OpenLibrarySearchType openLibrarySearchType) {

@@ -1,5 +1,6 @@
 package io.github.com.lucasmartinsvieira.trackr.services;
 
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibraryBookEntry;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySeachRequestDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchEditionsResponseDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchReponseDTO;
@@ -72,6 +73,11 @@ public class BookService {
 
     public OpenLibrarySearchEditionsResponseDTO searchEditions(String id) {
         return this.openLibraryClient.searchEditions(id);
+    }
+
+    public OpenLibraryBookEntry searchForOpenLibraryEditionEntry(String id) {
+
+        return this.openLibraryClient.searchForEdition(id);
     }
 
 }

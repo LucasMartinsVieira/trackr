@@ -1,5 +1,6 @@
 package io.github.com.lucasmartinsvieira.trackr.api.controllers;
 
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibraryBookEntry;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySeachRequestDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchEditionsResponseDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchReponseDTO;
@@ -55,6 +56,13 @@ public class BookController {
     @GetMapping("/search/{id}/editions")
     public ResponseEntity<OpenLibrarySearchEditionsResponseDTO> searchEditions(@PathVariable String id) {
         var response = this.bookService.searchEditions(id);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/search/{id}/edition")
+    public ResponseEntity<OpenLibraryBookEntry> searchForOpenLibraryEditionEntry(@PathVariable String id) {
+        var response = this.bookService.searchForOpenLibraryEditionEntry(id);
 
         return ResponseEntity.ok(response);
     }
