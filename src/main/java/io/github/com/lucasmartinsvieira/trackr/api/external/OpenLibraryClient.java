@@ -1,6 +1,7 @@
 package io.github.com.lucasmartinsvieira.trackr.api.external;
 
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySeachRequestDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchEditionsResponseDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchReponseDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -20,13 +21,13 @@ public class OpenLibraryClient {
         return restTemplate.getForObject(url, OpenLibrarySearchReponseDTO.class);
     }
 
-    public String searchEditions(String workId) {
+    public OpenLibrarySearchEditionsResponseDTO searchEditions(String workId) {
         String url = UriComponentsBuilder.fromUriString(openLibraryApiBaseUrl)
                 .path("/works/{workId}/editions.json")
                 .buildAndExpand(workId)
                 .toUriString();
 
-        return restTemplate.getForObject(url, String.class);
+        return restTemplate.getForObject(url, OpenLibrarySearchEditionsResponseDTO.class);
     }
 
     public String getBookInfo(String bookId) {

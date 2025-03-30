@@ -1,11 +1,11 @@
 package io.github.com.lucasmartinsvieira.trackr.api.controllers;
 
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySeachRequestDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchEditionsResponseDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchReponseDTO;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.Book;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.services.BookService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,13 +31,6 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<OpenLibrarySearchReponseDTO> searchForBook(@RequestBody @Valid OpenLibrarySeachRequestDTO dto) {
-        var books = this.bookService.searchBook(dto);
-
-        return ResponseEntity.ok(books);
-    }
-
     @DeleteMapping("{id}")
     public ResponseEntity deleteBook(@PathVariable UUID id, @AuthenticationPrincipal User user) {
         this.bookService.deleteBook(id, user);
@@ -50,5 +43,19 @@ public class BookController {
         var book = this.bookService.changeBookStatus(id, user);
 
         return ResponseEntity.ok(book);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<OpenLibrarySearchReponseDTO> searchForBook(@RequestBody @Valid OpenLibrarySeachRequestDTO dto) {
+        var books = this.bookService.searchBook(dto);
+
+        return ResponseEntity.ok(books);
+    }
+
+    @GetMapping("/search/{id}/editions")
+    public ResponseEntity<OpenLibrarySearchEditionsResponseDTO> searchEditions(@PathVariable String id) {
+        var response = this.bookService.searchEditions(id);
+
+        return ResponseEntity.ok(response);
     }
 }

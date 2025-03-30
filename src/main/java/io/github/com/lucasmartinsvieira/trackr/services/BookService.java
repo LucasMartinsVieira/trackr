@@ -1,6 +1,7 @@
 package io.github.com.lucasmartinsvieira.trackr.services;
 
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySeachRequestDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchEditionsResponseDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchReponseDTO;
 import io.github.com.lucasmartinsvieira.trackr.api.external.OpenLibraryClient;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.Book;
@@ -26,10 +27,6 @@ public class BookService {
     public BookService(BookRepository bookRepository, OpenLibraryClient openLibraryClient) {
         this.bookRepository = bookRepository;
         this.openLibraryClient = openLibraryClient;
-    }
-
-    public OpenLibrarySearchReponseDTO searchBook(OpenLibrarySeachRequestDTO dto) {
-        return this.openLibraryClient.searchBook(dto);
     }
 
     public List<Book> findAll() {
@@ -68,4 +65,13 @@ public class BookService {
 
         throw new BookStatusNotChangeableException("Book status can only be TO_READ or READING");
     }
+
+    public OpenLibrarySearchReponseDTO searchBook(OpenLibrarySeachRequestDTO dto) {
+        return this.openLibraryClient.searchBook(dto);
+    }
+
+    public OpenLibrarySearchEditionsResponseDTO searchEditions(String id) {
+        return this.openLibraryClient.searchEditions(id);
+    }
+
 }
