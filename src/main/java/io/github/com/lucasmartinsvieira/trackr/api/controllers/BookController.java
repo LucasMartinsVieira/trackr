@@ -1,9 +1,6 @@
 package io.github.com.lucasmartinsvieira.trackr.api.controllers;
 
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibraryBookEntry;
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySeachRequestDTO;
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchEditionsResponseDTO;
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchReponseDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.*;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.Book;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.services.BookService;
@@ -27,9 +24,8 @@ public class BookController {
 
     @GetMapping()
     @SecurityRequirement(name = "bearer-key")
-    public ResponseEntity<List<Book>> getAllBooks(@AuthenticationPrincipal User user) {
-        List<Book> books = this.bookService.findAll(user);
-        System.out.println(books);
+    public ResponseEntity<List<BookResponseDTO>> getAllBooks(@AuthenticationPrincipal User user) {
+        var books = this.bookService.findAll(user);
 
         return ResponseEntity.ok(books);
     }
@@ -44,7 +40,7 @@ public class BookController {
 
     @GetMapping("{id}")
     @SecurityRequirement(name = "bearer-key")
-    public ResponseEntity<Book> findBookById(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+    public ResponseEntity<BookResponseDTO> findBookById(@PathVariable UUID id, @AuthenticationPrincipal User user) {
         var book = this.bookService.findBookById(id, user);
 
         return ResponseEntity.ok(book);

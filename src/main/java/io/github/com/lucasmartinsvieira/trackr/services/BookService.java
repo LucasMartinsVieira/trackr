@@ -1,9 +1,6 @@
 package io.github.com.lucasmartinsvieira.trackr.services;
 
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibraryBookEntry;
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySeachRequestDTO;
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchEditionsResponseDTO;
-import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchReponseDTO;
+import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.*;
 import io.github.com.lucasmartinsvieira.trackr.api.external.OpenLibraryClient;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.Book;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.BookStatus;
@@ -30,18 +27,55 @@ public class BookService {
         this.openLibraryClient = openLibraryClient;
     }
 
-    public List<Book> findAll(User user) {
-        return this.bookRepository.findAllByUser(user);
+    public List<BookResponseDTO> findAll(User user) {
+        return this.bookRepository.findAllByUser(user)
+                .stream()
+                .map(book -> new BookResponseDTO(
+                        book.getId(),
+                        book.getAuthors(),
+                        book.getCoverUrl(),
+                        book.getDateFinished(),
+                        book.getDateStarted(),
+                        book.getIsbn10(),
+                        book.getIsbn13(),
+                        book.isLoved(),
+                        book.getOpenLibraryId(),
+                        book.getPublishDate(),
+                        book.getPublishers(),
+                        book.getStatus(),
+                        book.getSubtitle(),
+                        book.getTitle(),
+                        book.getType(),
+                        book.getUserRating()
+                ))
+                .toList();
     }
 
-    public Book findBookById(UUID id, User user) {
+    public BookResponseDTO findBookById(UUID id, User user) {
         var book = this.bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(String.format("Book with ID %s not found!", id)));
 
         if (!book.getUser().equals(user) && user.getRole() != UserRole.ADMIN) {
             throw new BookAccessDeniedException("This book register does not belong to you");
         }
 
-        return book;
+        return new BookResponseDTO(
+                book.getId(),
+                book.getAuthors(),
+                book.getCoverUrl(),
+                book.getDateFinished(),
+                book.getDateStarted(),
+                book.getIsbn10(),
+                book.getIsbn13(),
+                book.isLoved(),
+                book.getOpenLibraryId(),
+                book.getPublishDate(),
+                book.getPublishers(),
+                book.getStatus(),
+                book.getSubtitle(),
+                book.getTitle(),
+                book.getType(),
+                book.getUserRating()
+        );
     }
 
     @Transactional
@@ -56,7 +90,7 @@ public class BookService {
     }
 
     @Transactional
-    public Book changeBookStatus(UUID id, User user) {
+    public BookResponseDTO changeBookStatus(UUID id, User user) {
         var book = this.bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(String.format("Book with ID %s not found", id)));
 
         // TODO: Add filter instead of this?
@@ -67,12 +101,48 @@ public class BookService {
         if (book.getStatus().equals(BookStatus.TO_READ)) {
             book.setStatus(BookStatus.READING);
             book.setDateStarted(LocalDate.now());
-            return bookRepository.save(book);
+            bookRepository.save(book);
+            return new BookResponseDTO(
+                    book.getId(),
+                    book.getAuthors(),
+                    book.getCoverUrl(),
+                    book.getDateFinished(),
+                    book.getDateStarted(),
+                    book.getIsbn10(),
+                    book.getIsbn13(),
+                    book.isLoved(),
+                    book.getOpenLibraryId(),
+                    book.getPublishDate(),
+                    book.getPublishers(),
+                    book.getStatus(),
+                    book.getSubtitle(),
+                    book.getTitle(),
+                    book.getType(),
+                    book.getUserRating()
+            );
         }
         if (book.getStatus().equals(BookStatus.READING)) {
             book.setStatus(BookStatus.COMPLETE);
             book.setDateFinished(LocalDate.now());
-            return bookRepository.save(book);
+            bookRepository.save(book);
+            return new BookResponseDTO(
+                    book.getId(),
+                    book.getAuthors(),
+                    book.getCoverUrl(),
+                    book.getDateFinished(),
+                    book.getDateStarted(),
+                    book.getIsbn10(),
+                    book.getIsbn13(),
+                    book.isLoved(),
+                    book.getOpenLibraryId(),
+                    book.getPublishDate(),
+                    book.getPublishers(),
+                    book.getStatus(),
+                    book.getSubtitle(),
+                    book.getTitle(),
+                    book.getType(),
+                    book.getUserRating()
+            );
         }
 
         throw new BookStatusNotChangeableException("Book status can only be TO_READ or READING");
