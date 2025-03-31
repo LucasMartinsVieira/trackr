@@ -2,7 +2,7 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE books (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  openlibrary_id VARCHAR(20) UNIQUE NOT NULL,
+  openlibrary_id VARCHAR(20) NOT NULL,
   title TEXT NOT NULL,
   subtitle VARCHAR(255),
   authors JSONB NOT NULL,
@@ -11,7 +11,6 @@ CREATE TABLE books (
   isbn_10 VARCHAR(20),
   isbn_13 VARCHAR(20),
   number_of_pages INT,
-  description TEXT,
   publishers JSONB,
   status TEXT DEFAULT 'TO_READ',
   type TEXT DEFAULT 'PAPERBACK',

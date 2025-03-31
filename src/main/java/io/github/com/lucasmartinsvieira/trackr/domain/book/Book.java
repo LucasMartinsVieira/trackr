@@ -24,7 +24,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "openlibrary_id", unique = true, nullable = false, length = 20)
+    @Column(name = "openlibrary_id", nullable = false, length = 20)
     private String openLibraryId;
 
     @Column(columnDefinition = "TEXT")
@@ -48,9 +48,6 @@ public class Book {
 
     @Column(name = "isbn_13")
     private String isbn13;
-
-    @Column
-    private String description;
 
     @Type(JsonBinaryType.class)
     @Column(columnDefinition = "jsonb")
