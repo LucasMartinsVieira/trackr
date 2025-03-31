@@ -15,4 +15,9 @@ public class ExceptionHandler {
     public ResponseEntity handleBookStatusNotChangeable(BookStatusNotChangeableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity handleBookNotFoundException(BookNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }

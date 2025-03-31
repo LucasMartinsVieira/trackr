@@ -39,6 +39,13 @@ public class BookController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<Book> findBookById(@PathVariable UUID id, @AuthenticationPrincipal User user) {
+        var book = this.bookService.findBookById(id, user);
+
+        return ResponseEntity.ok(book);
+    }
+
     @PatchMapping("/changeStatus/{id}")
     public ResponseEntity changeBookStatus(@PathVariable UUID id, @AuthenticationPrincipal User user) {
         var book = this.bookService.changeBookStatus(id, user);

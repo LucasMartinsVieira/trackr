@@ -34,6 +34,16 @@ public class BookService {
         return this.bookRepository.findAllByUser(user);
     }
 
+    public Book findBookById(UUID id, User user) {
+        var book = this.bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(String.format("Book with ID %s not found!", id)));
+
+        if (!book.getUser().equals(user) && user.getRole() != UserRole.ADMIN) {
+            throw new BookAccessDeniedException("This book register does not belong to you");
+        }
+
+        return book;
+    }
+
     @Transactional
     public void deleteBook(UUID id, User user) {
         var book = this.bookRepository.getReferenceById(id);
@@ -49,6 +59,7 @@ public class BookService {
     public Book changeBookStatus(UUID id, User user) {
         var book = this.bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(String.format("Book with ID %s not found", id)));
 
+        // TODO: Add filter instead of this?
         if (!book.getUser().equals(user) && user.getRole() != UserRole.ADMIN) {
             throw new BookAccessDeniedException("This book register does not belong to you");
         }
