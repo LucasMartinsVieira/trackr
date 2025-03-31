@@ -45,12 +45,12 @@ public class AuthenticationController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((User) auth.getPrincipal());
+        var token = this.tokenService.generateToken((User) auth.getPrincipal());
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterUserRequestDTO dto) {
+    public ResponseEntity<LoginResponseDTO> register(@RequestBody @Valid RegisterUserRequestDTO dto) {
         System.out.println(dto);
         if (this.userRepository.findByEmail(dto.email()) != null) return ResponseEntity.badRequest().build();
 
@@ -58,7 +58,11 @@ public class AuthenticationController {
         User newUser = new User(dto.email(), encriptedPassoword, dto.name(), dto.role());
         this.userRepository.save(newUser);
 
-        return ResponseEntity.ok().build();
+        var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+        var token = this.tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @GetMapping("/me")
