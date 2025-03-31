@@ -25,8 +25,8 @@ public class BookController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Book>> getAllBooks() {
-        List<Book> books = this.bookService.findAll();
+    public ResponseEntity<List<Book>> getAllBooks(@AuthenticationPrincipal User user) {
+        List<Book> books = this.bookService.findAll(user);
         System.out.println(books);
 
         return ResponseEntity.ok(books);

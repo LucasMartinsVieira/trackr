@@ -30,8 +30,8 @@ public class BookService {
         this.openLibraryClient = openLibraryClient;
     }
 
-    public List<Book> findAll() {
-        return this.bookRepository.findAll();
+    public List<Book> findAll(User user) {
+        return this.bookRepository.findAllByUser(user);
     }
 
     @Transactional
