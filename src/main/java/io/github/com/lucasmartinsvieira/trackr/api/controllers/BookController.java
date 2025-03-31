@@ -7,6 +7,7 @@ import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.OpenLibrarySearchR
 import io.github.com.lucasmartinsvieira.trackr.domain.book.Book;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.services.BookService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +26,7 @@ public class BookController {
     }
 
     @GetMapping()
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<List<Book>> getAllBooks(@AuthenticationPrincipal User user) {
         List<Book> books = this.bookService.findAll(user);
         System.out.println(books);
@@ -33,6 +35,7 @@ public class BookController {
     }
 
     @DeleteMapping("{id}")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity deleteBook(@PathVariable UUID id, @AuthenticationPrincipal User user) {
         this.bookService.deleteBook(id, user);
 
@@ -40,12 +43,14 @@ public class BookController {
     }
 
     @GetMapping("{id}")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<Book> findBookById(@PathVariable UUID id, @AuthenticationPrincipal User user) {
         var book = this.bookService.findBookById(id, user);
 
         return ResponseEntity.ok(book);
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @PatchMapping("/changeStatus/{id}")
     public ResponseEntity changeBookStatus(@PathVariable UUID id, @AuthenticationPrincipal User user) {
         var book = this.bookService.changeBookStatus(id, user);
@@ -54,6 +59,7 @@ public class BookController {
     }
 
     @GetMapping("/search")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<OpenLibrarySearchReponseDTO> searchForBook(@RequestBody @Valid OpenLibrarySeachRequestDTO dto) {
         var books = this.bookService.searchBook(dto);
 
@@ -61,6 +67,7 @@ public class BookController {
     }
 
     @GetMapping("/search/{id}/editions")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<OpenLibrarySearchEditionsResponseDTO> searchEditions(@PathVariable String id) {
         var response = this.bookService.searchEditions(id);
 
@@ -68,6 +75,7 @@ public class BookController {
     }
 
     @GetMapping("/search/{id}/edition")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<OpenLibraryBookEntry> searchForOpenLibraryEditionEntry(@PathVariable String id) {
         var response = this.bookService.searchForOpenLibraryEditionEntry(id);
 

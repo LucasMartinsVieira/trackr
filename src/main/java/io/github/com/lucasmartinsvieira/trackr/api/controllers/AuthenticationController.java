@@ -71,6 +71,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(new AuthenticatedUserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getRole()));
     }
 
+    @SecurityRequirement(name = "bearer-key")
     @DeleteMapping("/delete/{id}")
     @Transactional
     public ResponseEntity<String> delete(@PathVariable String id) {
