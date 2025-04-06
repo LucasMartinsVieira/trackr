@@ -97,11 +97,7 @@ export default function Navbar() {
               </Button>
             </>
           ) : (
-            <Button
-              asChild
-              variant="default"
-              className="bg-yellow-500 hover:bg-yellow-500/90"
-            >
+            <Button asChild variant="default">
               <Link href="/login">Login</Link>
             </Button>
           )}
