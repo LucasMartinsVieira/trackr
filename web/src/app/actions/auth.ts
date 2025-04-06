@@ -7,6 +7,7 @@ import {
   RegisterFormState,
   registerSchema,
 } from "@/app/lib/definitions";
+import { loginUser, registerUser } from "../utils/auth";
 
 export async function login(
   _prevState: LoginFormState,
@@ -27,26 +28,27 @@ export async function login(
   const { email, password } = validatedFields.data;
 
   try {
-    // TODO: add real implementation of this
-    if (email === "demo@example.com" && password === "password123") {
-      const cookieStore = await cookies();
-      cookieStore.set("auth-token", "demo-token", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-        path: "/",
-      });
+    const { data, status } = await loginUser({ email, password });
 
-      redirect("/books");
+    if (status !== 200) {
+      return {
+        errors: {
+          _form: ["Invalid email or password. Please try again."],
+        },
+        success: false,
+      };
     }
 
-    return {
-      errors: {
-        _form: ["Invalid email or password. Please try again."],
-      },
-      success: false,
-    };
+    const cookieStore = await cookies();
+
+    cookieStore.set("auth-token", data.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+      path: "/",
+    });
   } catch (error) {
+    console.log(error);
     return {
       errors: {
         _form: ["An unexpected error occured. Please try again."],
@@ -54,6 +56,8 @@ export async function login(
       success: false,
     };
   }
+
+  redirect("/books");
 }
 
 export async function register(
@@ -77,33 +81,37 @@ export async function register(
   const { name, email, password } = validatedFields.data;
 
   try {
-    // TODO: add real implementation of this
-    if (email === "demo@example.com") {
+    const { data, status } = await registerUser({ name, email, password });
+
+    if (status !== 200) {
       return {
         errors: {
-          email: ["This email is already in use. Please try another."],
+          _form: ["An unexpected error occurred in the API. Please try again."],
         },
         success: false,
       };
     }
 
     const cookieStore = await cookies();
-    cookieStore.set("auth-token", "new-user-token", {
+
+    cookieStore.set("auth-token", data.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
     });
-
-    redirect("/books");
   } catch (error) {
+    console.log(error);
     return {
       errors: {
-        _form: ["An unexpected error occurred. Please try again."],
+        _form: ["An unexpected error occurred. Please try again. BOLOLO"],
       },
       success: false,
     };
   }
+
+  // TODO: put inside try catch
+  redirect("/books");
 }
 
 export async function logout() {

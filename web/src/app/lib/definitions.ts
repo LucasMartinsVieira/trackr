@@ -4,7 +4,7 @@ export const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
   password: z
     .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
+    .min(4, { message: "Password must be at least 4 characters" }),
 });
 
 export const registerSchema = z
@@ -13,7 +13,7 @@ export const registerSchema = z
     email: z.string().email({ message: "Please enter a valid email address" }),
     password: z
       .string()
-      .min(6, { message: "Password must be at least 6 characters" }),
+      .min(4, { message: "Password must be at least 4 characters" }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {

@@ -13,15 +13,11 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Book, Eye, EyeOff } from "lucide-react";
 import { useActionState, useState } from "react";
-import {
-  login,
-  register,
-  type LoginFormState,
-  type RegisterFormState,
-} from "@/app/actions/auth";
+import { login, register } from "@/app/actions/auth";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useFormStatus } from "react-dom";
+import { LoginFormState, RegisterFormState } from "@/app/lib/definitions";
 
 export default function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
