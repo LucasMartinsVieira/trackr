@@ -8,6 +8,7 @@ import {
   registerSchema,
 } from "@/app/lib/definitions";
 import { loginUser, registerUser } from "../utils/auth";
+import { useAuthContext } from "@/context/AuthContext";
 
 export async function login(
   _prevState: LoginFormState,
@@ -115,6 +116,7 @@ export async function register(
 }
 
 export async function logout() {
+  console.log("HERE");
   const cookieStore = await cookies();
   cookieStore.delete("auth-token");
   redirect("/auth");

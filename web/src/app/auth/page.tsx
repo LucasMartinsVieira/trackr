@@ -18,6 +18,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useFormStatus } from "react-dom";
 import { LoginFormState, RegisterFormState } from "@/app/lib/definitions";
+import { useAuthContext } from "@/context/AuthContext";
 
 export default function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,11 +37,15 @@ export default function AuthPage() {
 
   function SubmitButton({ children }: { children: React.ReactNode }) {
     const { pending } = useFormStatus();
+    const { isLoggedIn, setLoggedIn } = useAuthContext();
 
     return (
       <Button
         type="submit"
         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+        onClick={() => {
+          setLoggedIn(!isLoggedIn);
+        }}
         disabled={pending}
       >
         {pending ? "Processing..." : children}
