@@ -5,11 +5,13 @@ import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.services.BookService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,8 +25,8 @@ public class BookController {
 
     @GetMapping()
     @SecurityRequirement(name = "bearer-key")
-    public ResponseEntity<List<BookResponseDTO>> getAllBooks(@AuthenticationPrincipal User user) {
-        var books = this.bookService.findAll(user);
+    public ResponseEntity<Page<BookResponseDTO>> getAllBooks(@AuthenticationPrincipal User user, @PageableDefault(size = 10) Pageable pageable) {
+        var books = this.bookService.findAll(user, pageable);
 
         return ResponseEntity.ok(books);
     }

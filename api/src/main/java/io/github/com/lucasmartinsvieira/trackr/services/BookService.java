@@ -11,10 +11,11 @@ import io.github.com.lucasmartinsvieira.trackr.infra.exception.BookNotFoundExcep
 import io.github.com.lucasmartinsvieira.trackr.infra.exception.BookStatusNotChangeableException;
 import io.github.com.lucasmartinsvieira.trackr.repositories.BookRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,29 +28,8 @@ public class BookService {
         this.openLibraryClient = openLibraryClient;
     }
 
-    public List<BookResponseDTO> findAll(User user) {
-        return this.bookRepository.findAllByUser(user)
-                .stream()
-                .map(book -> new BookResponseDTO(
-                        book.getId(),
-                        book.getAuthors(),
-                        book.getCoverUrl(),
-                        book.getDateFinished(),
-                        book.getDateStarted(),
-                        book.getIsbn10(),
-                        book.getIsbn13(),
-                        book.isLoved(),
-                        book.getOpenLibraryId(),
-                        book.getPublishDate(),
-                        book.getPublishers(),
-                        book.getStatus(),
-                        book.getSubtitle(),
-                        book.getTitle(),
-                        book.getType(),
-                        book.getUserRating(),
-                        book.getNotes()
-                ))
-                .toList();
+    public Page<BookResponseDTO> findAll(User user, Pageable pageable) {
+        return this.bookRepository.findAllByUser(user, pageable).map(BookResponseDTO::new);
     }
 
     public BookResponseDTO findBookById(UUID id, User user) {
@@ -59,25 +39,7 @@ public class BookService {
             throw new BookAccessDeniedException("This book register does not belong to you");
         }
 
-        return new BookResponseDTO(
-                book.getId(),
-                book.getAuthors(),
-                book.getCoverUrl(),
-                book.getDateFinished(),
-                book.getDateStarted(),
-                book.getIsbn10(),
-                book.getIsbn13(),
-                book.isLoved(),
-                book.getOpenLibraryId(),
-                book.getPublishDate(),
-                book.getPublishers(),
-                book.getStatus(),
-                book.getSubtitle(),
-                book.getTitle(),
-                book.getType(),
-                book.getUserRating(),
-                book.getNotes()
-        );
+        return new BookResponseDTO(book);
     }
 
     @Transactional
@@ -104,49 +66,13 @@ public class BookService {
             book.setStatus(BookStatus.READING);
             book.setDateStarted(LocalDate.now());
             bookRepository.save(book);
-            return new BookResponseDTO(
-                    book.getId(),
-                    book.getAuthors(),
-                    book.getCoverUrl(),
-                    book.getDateFinished(),
-                    book.getDateStarted(),
-                    book.getIsbn10(),
-                    book.getIsbn13(),
-                    book.isLoved(),
-                    book.getOpenLibraryId(),
-                    book.getPublishDate(),
-                    book.getPublishers(),
-                    book.getStatus(),
-                    book.getSubtitle(),
-                    book.getTitle(),
-                    book.getType(),
-                    book.getUserRating(),
-                    book.getNotes()
-            );
+            return new BookResponseDTO(book);
         }
         if (book.getStatus().equals(BookStatus.READING)) {
             book.setStatus(BookStatus.COMPLETE);
             book.setDateFinished(LocalDate.now());
             bookRepository.save(book);
-            return new BookResponseDTO(
-                    book.getId(),
-                    book.getAuthors(),
-                    book.getCoverUrl(),
-                    book.getDateFinished(),
-                    book.getDateStarted(),
-                    book.getIsbn10(),
-                    book.getIsbn13(),
-                    book.isLoved(),
-                    book.getOpenLibraryId(),
-                    book.getPublishDate(),
-                    book.getPublishers(),
-                    book.getStatus(),
-                    book.getSubtitle(),
-                    book.getTitle(),
-                    book.getType(),
-                    book.getUserRating(),
-                    book.getNotes()
-            );
+            return new BookResponseDTO(book);
         }
 
         throw new BookStatusNotChangeableException("Book status can only be TO_READ or READING");
@@ -158,25 +84,7 @@ public class BookService {
 
         bookRepository.save(book);
 
-        return new BookResponseDTO(
-                book.getId(),
-                book.getAuthors(),
-                book.getCoverUrl(),
-                book.getDateFinished(),
-                book.getDateStarted(),
-                book.getIsbn10(),
-                book.getIsbn13(),
-                book.isLoved(),
-                book.getOpenLibraryId(),
-                book.getPublishDate(),
-                book.getPublishers(),
-                book.getStatus(),
-                book.getSubtitle(),
-                book.getTitle(),
-                book.getType(),
-                book.getUserRating(),
-                book.getNotes()
-        );
+        return new BookResponseDTO(book);
     }
 
     @Transactional
@@ -205,25 +113,7 @@ public class BookService {
 
         bookRepository.save(book);
 
-        return new BookResponseDTO(
-                book.getId(),
-                book.getAuthors(),
-                book.getCoverUrl(),
-                book.getDateFinished(),
-                book.getDateStarted(),
-                book.getIsbn10(),
-                book.getIsbn13(),
-                book.isLoved(),
-                book.getOpenLibraryId(),
-                book.getPublishDate(),
-                book.getPublishers(),
-                book.getStatus(),
-                book.getSubtitle(),
-                book.getTitle(),
-                book.getType(),
-                book.getUserRating(),
-                book.getNotes()
-        );
+        return new BookResponseDTO(book);
     }
 
     public OpenLibrarySearchReponseDTO searchBook(OpenLibrarySeachRequestDTO dto) {

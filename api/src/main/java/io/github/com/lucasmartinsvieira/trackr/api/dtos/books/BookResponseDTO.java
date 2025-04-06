@@ -1,5 +1,6 @@
 package io.github.com.lucasmartinsvieira.trackr.api.dtos.books;
 
+import io.github.com.lucasmartinsvieira.trackr.domain.book.Book;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.BookStatus;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.BookType;
 
@@ -26,4 +27,26 @@ public record BookResponseDTO(
         BookType type,
         BigDecimal userRating,
         String notes) {
+    public BookResponseDTO(Book book) {
+        this(
+                book.getId(),
+                book.getAuthors(),
+                book.getCoverUrl(),
+                book.getDateFinished(),
+                book.getDateStarted(),
+                book.getIsbn10(),
+                book.getIsbn13(),
+                book.isLoved(),
+                book.getOpenLibraryId(),
+                book.getPublishDate(),
+                book.getPublishers(),
+                book.getStatus(),
+                book.getSubtitle(),
+                book.getTitle(),
+                book.getType(),
+                book.getUserRating(),
+                book.getNotes()
+        );
+    }
 }
+
