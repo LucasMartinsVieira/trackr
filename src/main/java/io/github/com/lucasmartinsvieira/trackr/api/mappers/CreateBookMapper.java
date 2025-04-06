@@ -23,7 +23,7 @@ public class CreateBookMapper {
                 .user(user)
                 .loved(false)
                 .userRating(null)
-                .notes(null)
+                .notes(dto.notes())
                 .dateStarted(null)
                 .dateFinished(null)
                 .build();

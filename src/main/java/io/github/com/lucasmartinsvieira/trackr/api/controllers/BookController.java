@@ -1,7 +1,6 @@
 package io.github.com.lucasmartinsvieira.trackr.api.controllers;
 
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.*;
-import io.github.com.lucasmartinsvieira.trackr.domain.book.Book;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.services.BookService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -82,6 +81,14 @@ public class BookController {
     @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<BookResponseDTO> createBook(@RequestBody @Valid CreateBookRequestDTO dto, @AuthenticationPrincipal User user) {
         var book = this.bookService.createBook(dto, user);
+
+        return ResponseEntity.ok(book);
+    }
+
+    @PutMapping("/{id}")
+    @SecurityRequirement(name = "bearer-key")
+    public ResponseEntity<BookResponseDTO> createBook(@PathVariable UUID id, @RequestBody @Valid UpdateBookRequestDTO dto, @AuthenticationPrincipal User user) {
+        var book = this.bookService.updateBook(id, dto, user);
 
         return ResponseEntity.ok(book);
     }
