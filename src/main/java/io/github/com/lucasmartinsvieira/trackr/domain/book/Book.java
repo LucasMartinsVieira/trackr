@@ -49,6 +49,9 @@ public class Book {
     @Column(name = "isbn_13")
     private String isbn13;
 
+    @Column
+    int numberOfPages;
+
     @Type(JsonBinaryType.class)
     @Column(columnDefinition = "jsonb")
     private List<String> publishers;

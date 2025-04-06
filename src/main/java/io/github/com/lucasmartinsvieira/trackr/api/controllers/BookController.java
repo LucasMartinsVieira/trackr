@@ -77,4 +77,12 @@ public class BookController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping
+    @SecurityRequirement(name = "bearer-key")
+    public ResponseEntity<BookResponseDTO> createBook(@RequestBody @Valid CreateBookRequestDTO dto, @AuthenticationPrincipal User user) {
+        var book = this.bookService.createBook(dto, user);
+
+        return ResponseEntity.ok(book);
+    }
 }

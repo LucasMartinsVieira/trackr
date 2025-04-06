@@ -2,7 +2,7 @@ package io.github.com.lucasmartinsvieira.trackr.services;
 
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.*;
 import io.github.com.lucasmartinsvieira.trackr.api.external.OpenLibraryClient;
-import io.github.com.lucasmartinsvieira.trackr.domain.book.Book;
+import io.github.com.lucasmartinsvieira.trackr.api.mappers.CreateBookMapper;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.BookStatus;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.UserRole;
@@ -46,7 +46,8 @@ public class BookService {
                         book.getSubtitle(),
                         book.getTitle(),
                         book.getType(),
-                        book.getUserRating()
+                        book.getUserRating(),
+                        book.getNotes()
                 ))
                 .toList();
     }
@@ -74,7 +75,8 @@ public class BookService {
                 book.getSubtitle(),
                 book.getTitle(),
                 book.getType(),
-                book.getUserRating()
+                book.getUserRating(),
+                book.getNotes()
         );
     }
 
@@ -118,7 +120,8 @@ public class BookService {
                     book.getSubtitle(),
                     book.getTitle(),
                     book.getType(),
-                    book.getUserRating()
+                    book.getUserRating(),
+                    book.getNotes()
             );
         }
         if (book.getStatus().equals(BookStatus.READING)) {
@@ -141,11 +144,39 @@ public class BookService {
                     book.getSubtitle(),
                     book.getTitle(),
                     book.getType(),
-                    book.getUserRating()
+                    book.getUserRating(),
+                    book.getNotes()
             );
         }
 
         throw new BookStatusNotChangeableException("Book status can only be TO_READ or READING");
+    }
+
+    @Transactional
+    public BookResponseDTO createBook(CreateBookRequestDTO dto, User user) {
+        var book = CreateBookMapper.map(dto, user);
+
+        bookRepository.save(book);
+
+        return new BookResponseDTO(
+                book.getId(),
+                book.getAuthors(),
+                book.getCoverUrl(),
+                book.getDateFinished(),
+                book.getDateStarted(),
+                book.getIsbn10(),
+                book.getIsbn13(),
+                book.isLoved(),
+                book.getOpenLibraryId(),
+                book.getPublishDate(),
+                book.getPublishers(),
+                book.getStatus(),
+                book.getSubtitle(),
+                book.getTitle(),
+                book.getType(),
+                book.getUserRating(),
+                book.getNotes()
+        );
     }
 
     public OpenLibrarySearchReponseDTO searchBook(OpenLibrarySeachRequestDTO dto) {

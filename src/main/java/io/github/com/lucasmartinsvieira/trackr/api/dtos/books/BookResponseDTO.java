@@ -24,5 +24,6 @@ public record BookResponseDTO(
         String subtitle,
         String title,
         BookType type,
-        BigDecimal userRating) {
+        BigDecimal userRating,
+        String notes) {
 }
