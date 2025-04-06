@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 import { usePathname } from "next/navigation";
 import { Book, Home, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { logout } from "@/app/actions/auth";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -80,25 +81,34 @@ export default function Navbar() {
                         </Link>
                       </DropdownMenuItem>
                     ))}
-                    <DropdownMenuItem className="text-red-500">
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Logout
-                    </DropdownMenuItem>
+                    <form action={logout} className="w-full">
+                      <DropdownMenuItem className="text-red-500">
+                        <Button
+                          type="submit"
+                          className="flex items-center w-full"
+                        >
+                          <LogOut className="h-4 w-4 mr-2" />
+                          Logout
+                        </Button>
+                      </DropdownMenuItem>
+                    </form>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hidden md:flex items-center gap-2"
-              >
-                <LogOut className="h-4 w-4" />
-                Logout
-              </Button>
+              <form action={logout} className="hidden md:block">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hidden md:flex items-center gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </Button>
+              </form>
             </>
           ) : (
             <Button asChild variant="default">
-              <Link href="/login">Login</Link>
+              <Link href="/auth">Login</Link>
             </Button>
           )}
         </nav>
