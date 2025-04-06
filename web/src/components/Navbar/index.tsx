@@ -11,11 +11,12 @@ import { usePathname } from "next/navigation";
 import { Book, Home, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/app/actions/auth";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Navbar() {
   const pathname = usePathname();
 
-  const isLoggedIn = false;
+  const isLoggedIn = useAuth();
 
   const routes = [
     {

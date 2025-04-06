@@ -119,3 +119,11 @@ export async function logout() {
   cookieStore.delete("auth-token");
   redirect("/auth");
 }
+
+export async function checkAuthStatus(): Promise<boolean> {
+  const cookieStore = await cookies();
+
+  const token = cookieStore.get("auth-token");
+
+  return !!token;
+}
