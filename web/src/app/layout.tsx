@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { TrackrThemeProvider } from "@/components/theme-provider";
+import { TrackrThemeProvider } from "@/components/providers/theme-provider";
 import Navbar from "@/components/Navbar";
 import { AuthProvider } from "@/context/AuthContext";
+import { UseQueryClientProvider } from "@/components/providers/tanstack-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,10 +23,12 @@ export default function RootLayout({
       <body className={`${inter.className}`}>
         <TrackrThemeProvider attribute="class" defaultTheme="light">
           <AuthProvider>
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-1">{children}</main>
-            </div>
+            <UseQueryClientProvider>
+              <div className="min-h-screen flex flex-col">
+                <Navbar />
+                <main className="flex-1">{children}</main>
+              </div>
+            </UseQueryClientProvider>
           </AuthProvider>
         </TrackrThemeProvider>
       </body>
