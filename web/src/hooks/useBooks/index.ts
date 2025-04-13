@@ -6,7 +6,7 @@ export function useBooks() {
   async function listBooks(props: ListBooksProps) {
     const { token: authorization } = props;
 
-    const req = await fetch(`/books/api`, {
+    const req = await fetch(`/api/books`, {
       method: "GET",
       headers: { authorization },
     });
