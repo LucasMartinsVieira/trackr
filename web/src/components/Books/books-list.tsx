@@ -1,7 +1,8 @@
 import { cn } from "@/lib/utils";
 import { ListBookContent } from "@/types/book";
-import { Badge, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
+import { Badge } from "../ui/badge";
 import Link from "next/link";
 
 interface Props {
@@ -44,7 +45,7 @@ export function BooksList({ books }: Props) {
                             : "bg-blue-600 hover:bg-blue-600",
                       )}
                     >
-                      {book.status}
+                      {book.status.replace("_", " ").toLowerCase()}
                     </Badge>
                   </div>
                   <p className="text-sm text-muted-foreground line-clamp-1">
