@@ -13,10 +13,10 @@ public class OpenLibraryClient {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String openLibraryApiBaseUrl = "https://openlibrary.org/";
 
-    public OpenLibrarySearchReponseDTO searchBook(OpenLibrarySeachRequestDTO dto) {
+    public OpenLibrarySearchReponseDTO searchBook(String query, OpenLibrarySearchType openLibrarySearchType) {
         String url = UriComponentsBuilder.fromUriString(openLibraryApiBaseUrl)
                 .path("search.json")
-                .queryParam(buildQueryParam(dto.openLibrarySearchType()), dto.query())
+                .queryParam(buildQueryParam(openLibrarySearchType), query)
                 .toUriString();
 
         return restTemplate.getForObject(url, OpenLibrarySearchReponseDTO.class);

@@ -1,6 +1,7 @@
 package io.github.com.lucasmartinsvieira.trackr.api.controllers;
 
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.*;
+import io.github.com.lucasmartinsvieira.trackr.api.external.OpenLibrarySearchType;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.BookStatus;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.services.BookService;
@@ -58,8 +59,10 @@ public class BookController {
 
     @GetMapping("/search")
     @SecurityRequirement(name = "bearer-key")
-    public ResponseEntity<OpenLibrarySearchReponseDTO> searchForBook(@RequestBody @Valid OpenLibrarySeachRequestDTO dto) {
-        var books = this.bookService.searchBook(dto);
+    public ResponseEntity<OpenLibrarySearchReponseDTO> searchForBook(
+            @RequestParam(required = true) String query,
+            @RequestParam(required = true) OpenLibrarySearchType openLibrarySearchType) {
+        var books = this.bookService.searchBook(query, openLibrarySearchType);
 
         return ResponseEntity.ok(books);
     }

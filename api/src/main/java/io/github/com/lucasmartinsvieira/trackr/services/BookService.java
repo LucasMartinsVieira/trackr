@@ -2,6 +2,7 @@ package io.github.com.lucasmartinsvieira.trackr.services;
 
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.*;
 import io.github.com.lucasmartinsvieira.trackr.api.external.OpenLibraryClient;
+import io.github.com.lucasmartinsvieira.trackr.api.external.OpenLibrarySearchType;
 import io.github.com.lucasmartinsvieira.trackr.api.mappers.CreateBookMapper;
 import io.github.com.lucasmartinsvieira.trackr.domain.book.BookStatus;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
@@ -121,8 +122,8 @@ public class BookService {
         return new BookResponseDTO(book);
     }
 
-    public OpenLibrarySearchReponseDTO searchBook(OpenLibrarySeachRequestDTO dto) {
-        return this.openLibraryClient.searchBook(dto);
+    public OpenLibrarySearchReponseDTO searchBook(String query, OpenLibrarySearchType openLibrarySearchType) {
+        return this.openLibraryClient.searchBook(query, openLibrarySearchType);
     }
 
     public OpenLibrarySearchEditionsResponseDTO searchEditions(String id) {
