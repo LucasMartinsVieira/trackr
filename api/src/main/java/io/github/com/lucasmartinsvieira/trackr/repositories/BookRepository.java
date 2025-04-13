@@ -1,6 +1,7 @@
 package io.github.com.lucasmartinsvieira.trackr.repositories;
 
 import io.github.com.lucasmartinsvieira.trackr.domain.book.Book;
+import io.github.com.lucasmartinsvieira.trackr.domain.book.BookStatus;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,4 +11,5 @@ import java.util.UUID;
 
 public interface BookRepository extends JpaRepository<Book, UUID> {
     Page<Book> findAllByUser(User user, Pageable pageable);
+    Page<Book> findAllByUserAndStatus(User user, BookStatus status, Pageable pageable);
 }

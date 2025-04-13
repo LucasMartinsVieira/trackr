@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,8 +29,12 @@ public class BookService {
         this.openLibraryClient = openLibraryClient;
     }
 
-    public Page<BookResponseDTO> findAll(User user, Pageable pageable) {
+    public Page<BookResponseDTO> findAll(User user, BookStatus status, Pageable pageable) {
+        if (status != null) {
+            return this.bookRepository.findAllByUserAndStatus(user, status, pageable).map(BookResponseDTO::new);
+        } else {
         return this.bookRepository.findAllByUser(user, pageable).map(BookResponseDTO::new);
+        }
     }
 
     public BookResponseDTO findBookById(UUID id, User user) {

@@ -1,6 +1,7 @@
 package io.github.com.lucasmartinsvieira.trackr.api.controllers;
 
 import io.github.com.lucasmartinsvieira.trackr.api.dtos.books.*;
+import io.github.com.lucasmartinsvieira.trackr.domain.book.BookStatus;
 import io.github.com.lucasmartinsvieira.trackr.domain.user.User;
 import io.github.com.lucasmartinsvieira.trackr.services.BookService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,8 +26,8 @@ public class BookController {
 
     @GetMapping()
     @SecurityRequirement(name = "bearer-key")
-    public ResponseEntity<Page<BookResponseDTO>> getAllBooks(@AuthenticationPrincipal User user, @PageableDefault(size = 10) Pageable pageable) {
-        var books = this.bookService.findAll(user, pageable);
+    public ResponseEntity<Page<BookResponseDTO>> getAllBooks(@AuthenticationPrincipal User user, @RequestParam(required = false) BookStatus status, @PageableDefault(size = 10) Pageable pageable) {
+        var books = this.bookService.findAll(user, status, pageable);
 
         return ResponseEntity.ok(books);
     }
