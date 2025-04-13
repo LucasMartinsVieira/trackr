@@ -26,7 +26,9 @@ public record BookResponseDTO(
         String title,
         BookType type,
         BigDecimal userRating,
-        String notes) {
+        String notes,
+        int numberOfPages
+) {
     public BookResponseDTO(Book book) {
         this(
                 book.getId(),
@@ -45,7 +47,8 @@ public record BookResponseDTO(
                 book.getTitle(),
                 book.getType(),
                 book.getUserRating(),
-                book.getNotes()
+                book.getNotes(),
+                book.getNumberOfPages()
         );
     }
 }
