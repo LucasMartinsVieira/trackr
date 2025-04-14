@@ -40,7 +40,7 @@ export default function BooksPage() {
   const fetchBooks = async () => {
     const books = await listBooks({
       token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0cmFja3ItYXBpIiwic3ViIjoibHVjYXNAZW1haWwuY29tIiwiZXhwIjoxNzQ0NTg3NDUyfQ.D30gVpJ1Vxpql50HXlqT9xmVqJ6LU8Po2liTdsNxdRE",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0cmFja3ItYXBpIiwic3ViIjoibHVjYXNAZW1haWwuY29tIiwiZXhwIjoxNzQ0NTk1Mjg3fQ.YJHO2CN-JPhdo4Zbq7LDPRzcukuIqbByDBiyJkFUlyo",
     });
 
     return books;

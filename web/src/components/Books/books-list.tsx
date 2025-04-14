@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { ListBookContent } from "@/types/book";
-import { Star } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
 import Link from "next/link";
@@ -30,6 +30,11 @@ export function BooksList({ books }: Props) {
                   alt={book.title}
                   className="object-cover w-full h-full"
                 />
+                {book.loved && (
+                  <div className="absolute top-0 right-0 bg-red-500 p-1 rounded-bl-md">
+                    <Heart className="h-3 w-3 text-white fill-white" />
+                  </div>
+                )}
               </div>
               <div className="flex flex-col justify-between flex-1">
                 <div>

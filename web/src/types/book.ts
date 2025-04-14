@@ -40,6 +40,7 @@ export interface ListBookContent {
   type: BookType;
   userRating: number | null;
   notes: string | null;
+  numberOfPages: number;
 }
 
 export interface ListBooksUseQueryInterface {
