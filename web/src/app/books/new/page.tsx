@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -35,7 +34,17 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-//TODO: Add typing to things here
+// Import the Dialog components and useRouter
+import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useBooks } from "@/hooks/useBooks";
 
 // API functions
 const searchBooks = async ({ query, searchType, page = 1, limit = 10 }) => {
@@ -80,6 +89,13 @@ export default function NewBookPage() {
   const [readingStatus, setReadingStatus] = useState("reading");
   const [currentStep, setCurrentStep] = useState(1);
   const [isSearchSubmitted, setIsSearchSubmitted] = useState(false);
+
+  const { addBook } = useBooks();
+
+  // In the NewBookPage component, add these new state variables
+  const router = useRouter();
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [bookToSave, setBookToSave] = useState(null);
 
   // Refs for scrolling
   const searchRef = useRef(null);
@@ -202,11 +218,11 @@ export default function NewBookPage() {
         : null,
       title: selectedEdition.title || "",
       subtitle: selectedEdition.subtitle || "",
-      // Handle authors which might be in different formats depending on the API response
-      authors: selectedEdition.authors
-        ? selectedEdition.authors.map((author) => author.name || author)
-        : selectedEdition.author_name || [],
-      publish_date: selectedEdition.publish_date || "",
+      // Extract author names, handling different possible formats
+      authors: extractAuthorNames(selectedEdition),
+      publish_date: selectedEdition.publish_date
+        ? formatPublishDate(selectedEdition.publish_date)
+        : null,
       // Construct cover URL from cover ID
       cover_url:
         selectedEdition.covers && selectedEdition.covers.length > 0
@@ -238,11 +254,130 @@ export default function NewBookPage() {
       reading_status: readingStatus,
     };
 
-    // Log the complete data that would be saved to the database
-    console.log("Book data to save:", editionData);
+    // Store the data and show confirmation modal
+    setBookToSave(editionData);
+    setShowConfirmation(true);
+  };
 
-    // Show success message
-    alert(`Book "${selectedEdition.title}" saved as "${readingStatus}"!`);
+  // Add this helper function to format publish dates
+  const formatPublishDate = (dateString) => {
+    if (!dateString) return null;
+
+    // Try to parse the date string
+    const date = new Date(dateString);
+
+    // Check if the date is valid
+    if (!isNaN(date.getTime())) {
+      return date.toISOString();
+    }
+
+    // Handle formats like "May 2017" or just "2017"
+    const yearMatch = dateString.match(/\b\d{4}\b/);
+    if (yearMatch) {
+      const year = Number.parseInt(yearMatch[0]);
+
+      // Check for month names
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+
+      let month = 0; // Default to January
+      for (let i = 0; i < months.length; i++) {
+        if (
+          dateString.includes(months[i]) ||
+          dateString.includes(months[i].substring(0, 3))
+        ) {
+          month = i;
+          break;
+        }
+      }
+
+      // Check for day
+      const dayMatch = dateString.match(/\b\d{1,2}\b(?!\d)/);
+      const day =
+        dayMatch && dayMatch[0] !== yearMatch[0]
+          ? Number.parseInt(dayMatch[0])
+          : 1;
+
+      // Create a new date with the extracted components
+      const formattedDate = new Date(year, month, day);
+      return formattedDate.toISOString();
+    }
+
+    // If we can't parse the date, return null
+    return null;
+  };
+
+  // Add this helper function to extract author names
+  const extractAuthorNames = (edition) => {
+    // If edition has authors array with objects containing name property
+    if (edition.authors && Array.isArray(edition.authors)) {
+      return edition.authors.map((author) => {
+        // Handle both {name: "Author Name"} and "Author Name" formats
+        return typeof author === "object" && author !== null
+          ? author.name || "Unknown Author"
+          : author;
+      });
+    }
+
+    // If edition has author_name array (common in search results)
+    if (edition.author_name && Array.isArray(edition.author_name)) {
+      return edition.author_name;
+    }
+
+    // If edition has a single author
+    if (
+      edition.author &&
+      typeof edition.author === "object" &&
+      edition.author !== null
+    ) {
+      return [edition.author.name || "Unknown Author"];
+    }
+
+    // If edition has a single author as string
+    if (edition.author && typeof edition.author === "string") {
+      return [edition.author];
+    }
+
+    // Default to empty array if no author information is found
+    return [];
+  };
+
+  // Add a function to handle confirmation
+  const handleConfirmSave = async () => {
+    // Close the modal
+    setShowConfirmation(false);
+
+    await addBook({
+      title: bookToSave.title,
+      subtitle: bookToSave.subtitle,
+      // authors: editionData.authors,
+      authors: bookToSave.authors,
+      reading_status: bookToSave.reading_status as ReadingStatus,
+      publish_date: bookToSave.publish_date,
+      publishers: bookToSave.publishers,
+      number_of_pages: bookToSave.number_of_pages,
+      isbn_10: bookToSave.isbn_10,
+      isbn_13: bookToSave.isbn_13,
+      cover_url: bookToSave.cover_url,
+      openLibraryId: bookToSave.openlibraryId,
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0cmFja3ItYXBpIiwic3ViIjoibHVjYXNAZW1haWwuY29tIiwiZXhwIjoxNzQ1Mjg4MzUxfQ.Fz8Twk6G9lkZRdeJHbpkznaVpLagiiJAlMSCxEqarfE",
+    });
+
+    // Navigate to the books page
+    router.push("/books");
   };
 
   // Get placeholder text based on search type
@@ -687,8 +822,7 @@ export default function NewBookPage() {
             <CardHeader>
               <CardTitle>How would you like to save this book?</CardTitle>
               <CardDescription>
-                Select the reading status for &quot;{selectedEdition.title}
-                &quot;
+                Select the reading status for "{selectedEdition.title}"
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -697,7 +831,7 @@ export default function NewBookPage() {
                 onValueChange={setReadingStatus}
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="reading" id="reading" />
+                  <RadioGroupItem value="READING" id="reading" />
                   <Label htmlFor="reading" className="flex items-center gap-2">
                     <BookOpen className="w-4 h-4" />
                     Currently Reading
@@ -705,7 +839,7 @@ export default function NewBookPage() {
                 </div>
                 <Separator className="my-2" />
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="to-read" id="to-read" />
+                  <RadioGroupItem value="TO_READ" id="to-read" />
                   <Label htmlFor="to-read" className="flex items-center gap-2">
                     <Book className="w-4 h-4" />
                     Want to Read
@@ -713,7 +847,7 @@ export default function NewBookPage() {
                 </div>
                 <Separator className="my-2" />
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="read" id="read" />
+                  <RadioGroupItem value="COMPLETE" id="read" />
                   <Label htmlFor="read" className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4" />
                     Already Read
@@ -721,7 +855,7 @@ export default function NewBookPage() {
                 </div>
                 <Separator className="my-2" />
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="paused" id="paused" />
+                  <RadioGroupItem value="PAUSED" id="paused" />
                   <Label htmlFor="paused" className="flex items-center gap-2">
                     <PauseCircle className="w-4 h-4" />
                     Paused Reading
@@ -729,7 +863,7 @@ export default function NewBookPage() {
                 </div>
                 <Separator className="my-2" />
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="dropped" id="dropped" />
+                  <RadioGroupItem value="DROPPED" id="dropped" />
                   <Label htmlFor="dropped" className="flex items-center gap-2">
                     <XCircle className="w-4 h-4" />
                     Dropped
@@ -745,6 +879,52 @@ export default function NewBookPage() {
           </Card>
         </section>
       )}
+      {/* Add the confirmation modal at the end of the component, just before the closing div */}
+      {/* Confirmation Modal */}
+      <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Book Addition</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to add "{bookToSave?.title}" to your{" "}
+              {readingStatus} list?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex items-center gap-4 py-4">
+            {bookToSave?.cover_url && (
+              <div className="flex-shrink-0 w-16 h-20 bg-muted rounded overflow-hidden">
+                <img
+                  src={bookToSave.cover_url || "/placeholder.svg"}
+                  alt={bookToSave.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+            <div>
+              <h3 className="font-semibold">{bookToSave?.title}</h3>
+              {bookToSave?.authors?.length > 0 && (
+                <p className="text-sm text-muted-foreground">
+                  by {bookToSave.authors.join(", ")}
+                </p>
+              )}
+              {bookToSave?.publishers?.length > 0 && (
+                <p className="text-sm text-muted-foreground">
+                  {bookToSave.publishers[0]} • {bookToSave.publish_date}
+                </p>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowConfirmation(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleConfirmSave}>Add to Collection</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

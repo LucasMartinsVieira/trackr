@@ -5,7 +5,7 @@ export async function middleware(request: NextRequest) {
 
   const token = request.cookies.get("auth-token");
 
-  const protectedRoutes = ["/books", "/profile"];
+  const protectedRoutes = ["/books"];
 
   if (protectedRoutes.some((route) => pathname.startsWith(route)) && !token) {
     return NextResponse.redirect(new URL("/auth", request.url));

@@ -59,6 +59,105 @@ export async function fetchEditions({
 }
 
 /**
+ * Extract author names from an edition object
+ */
+export function extractAuthorNames(edition: any): string[] {
+  // If edition has authors array with objects containing name property
+  if (edition.authors && Array.isArray(edition.authors)) {
+    return edition.authors.map((author) => {
+      // Handle both {name: "Author Name"} and "Author Name" formats
+      return typeof author === "object" && author !== null
+        ? author.name || "Unknown Author"
+        : author;
+    });
+  }
+
+  // If edition has author_name array (common in search results)
+  if (edition.author_name && Array.isArray(edition.author_name)) {
+    return edition.author_name;
+  }
+
+  // If edition has a single author
+  if (
+    edition.author &&
+    typeof edition.author === "object" &&
+    edition.author !== null
+  ) {
+    return [edition.author.name || "Unknown Author"];
+  }
+
+  // If edition has a single author as string
+  if (edition.author && typeof edition.author === "string") {
+    return [edition.author];
+  }
+
+  // Default to empty array if no author information is found
+  return [];
+}
+
+/**
+ * Format a publish date string into a Date object
+ */
+export function formatPublishDate(dateString: string): string | null {
+  if (!dateString) return null;
+
+  // Try to parse the date string
+  const date = new Date(dateString);
+
+  // Check if the date is valid
+  if (!isNaN(date.getTime())) {
+    return date.toISOString();
+  }
+
+  // Handle formats like "May 2017" or just "2017"
+  const yearMatch = dateString.match(/\b\d{4}\b/);
+  if (yearMatch) {
+    const year = Number.parseInt(yearMatch[0]);
+
+    // Check for month names
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    let month = 0; // Default to January
+    for (let i = 0; i < months.length; i++) {
+      if (
+        dateString.includes(months[i]) ||
+        dateString.includes(months[i].substring(0, 3))
+      ) {
+        month = i;
+        break;
+      }
+    }
+
+    // Check for day
+    const dayMatch = dateString.match(/\b\d{1,2}\b(?!\d)/);
+    const day =
+      dayMatch && dayMatch[0] !== yearMatch[0]
+        ? Number.parseInt(dayMatch[0])
+        : 1;
+
+    // Create a new date with the extracted components
+    const formattedDate = new Date(year, month, day);
+    return formattedDate.toISOString();
+  }
+
+  // If we can't parse the date, return null
+  return null;
+}
+
+/**
  * Save a book to the user's collection
  */
 export async function saveBook({

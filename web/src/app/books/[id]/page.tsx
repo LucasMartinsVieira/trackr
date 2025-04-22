@@ -19,7 +19,7 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
   const fetchBookById = async () => {
     const book = getBookById({
       token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0cmFja3ItYXBpIiwic3ViIjoibHVjYXNAZW1haWwuY29tIiwiZXhwIjoxNzQ0NTk1Mjg3fQ.YJHO2CN-JPhdo4Zbq7LDPRzcukuIqbByDBiyJkFUlyo",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0cmFja3ItYXBpIiwic3ViIjoibHVjYXNAZW1haWwuY29tIiwiZXhwIjoxNzQ1Mjg3OTExfQ.17CjzYqnyhf94AcWAA2uM26fJvzuUqze-N74uQUasSY",
       book: params.id,
     });
     return book;

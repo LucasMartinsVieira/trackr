@@ -31,12 +31,6 @@ export default function Navbar() {
       icon: Book,
       active: pathname === "/books",
     },
-    {
-      href: "/profile",
-      label: "Profile",
-      icon: User,
-      active: pathname === "/profile",
-    },
   ];
 
   return (
