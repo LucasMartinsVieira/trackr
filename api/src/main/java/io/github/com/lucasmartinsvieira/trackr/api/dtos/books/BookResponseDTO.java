@@ -14,7 +14,7 @@ public record BookResponseDTO(
         List<String> authors,
         String coverUrl,
         LocalDate dateFinished,
-        LocalDate dateStated,
+        LocalDate dateStarted,
         String isbn10,
         String isbn13,
         boolean loved,

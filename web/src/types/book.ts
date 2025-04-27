@@ -27,7 +27,7 @@ export interface ListBookContent {
   authors: string[];
   coverUrl: string;
   dateFinished: Date;
-  dateStated: Date;
+  dateStarted: Date;
   isbn10: string;
   isbn13: string;
   loved: boolean;

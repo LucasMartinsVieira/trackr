@@ -43,8 +43,8 @@ export default function BookDetailPage() {
   });
 
   let readingDuration = null;
-  if (book?.dateStated && book.dateFinished) {
-    readingDuration = differenceInDays(book.dateFinished, book.dateStated);
+  if (book?.dateStarted && book.dateFinished) {
+    readingDuration = differenceInDays(book.dateFinished, book.dateStarted);
   }
 
   if (isLoading) {
@@ -346,9 +346,9 @@ export default function BookDetailPage() {
                         Started
                       </p>
                       <p>
-                        {book.dateStated
+                        {book.dateStarted
                           ? format(
-                              parseISO(book.dateStated.toString()),
+                              parseISO(book.dateStarted.toString()),
                               "dd/MM/yyyy",
                             )
                           : "Not informed"}
