@@ -297,7 +297,7 @@ export default function BookDetailPage() {
 
             <div className="space-y-1">
               <p className="text-sm font-medium text-muted-foreground">ISBN</p>
-              <p>{book.isbn13}</p>
+              <p>{book.isbn13 ? book.isbn13 : "Not informed"}</p>
             </div>
 
             <div className="space-y-1">
@@ -339,10 +339,12 @@ export default function BookDetailPage() {
                         Started
                       </p>
                       <p>
-                        {format(
-                          parseISO(book.dateStated.toString()),
-                          "dd/MM/yyyy",
-                        )}
+                        {book.dateStated
+                          ? format(
+                              parseISO(book.dateStated.toString()),
+                              "dd/MM/yyyy",
+                            )
+                          : "Not informed"}
                       </p>
                     </div>
                   </CardContent>
@@ -356,10 +358,12 @@ export default function BookDetailPage() {
                         Finished
                       </p>
                       <p>
-                        {format(
-                          parseISO(book.dateFinished.toString()),
-                          "dd/MM/yyyy",
-                        )}
+                        {book.dateFinished
+                          ? format(
+                              parseISO(book.dateFinished.toString()),
+                              "dd/MM/yyyy",
+                            )
+                          : "Not informed"}
                       </p>
                     </div>
                   </CardContent>

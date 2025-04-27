@@ -19,9 +19,9 @@ public record CreateBookRequestDTO(
         List<String> authors,
         LocalDate publishDate,
         String coverUrl,
-        @Size(min = 1, max = 20)
+        // @Size(min = 1, max = 20)
         String isbn10,
-        @Size(min = 1, max = 20)
+        // @Size(min = 1, max = 20)
         String isbn13,
         int numberOfPages,
         List<String> publishers,
