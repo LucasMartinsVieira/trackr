@@ -28,7 +28,8 @@ import {
 import { useBooks } from "@/hooks/useBooks";
 import { useQuery } from "@tanstack/react-query";
 import { BookStatus, ListBooksUseQueryInterface } from "@/types/book";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useAuthContext } from "@/components/providers/auth-provider";
+import BookListSkeleton from "@/components/Books/book-list-skeleton";
 
 export default function BooksPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -37,10 +38,15 @@ export default function BooksPage() {
   const { listBooks } = useBooks();
   const { push } = useRouter();
 
+  const { token, loading: authLoading } = useAuthContext();
+
+  console.log("LOGANDO TOKEN", token);
+
   const fetchBooks = async () => {
+    // if (!token) return;
+
     const books = await listBooks({
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0cmFja3ItYXBpIiwic3ViIjoibHVjYXNAZW1haWwuY29tIiwiZXhwIjoxNzQ1Mjg3OTExfQ.17CjzYqnyhf94AcWAA2uM26fJvzuUqze-N74uQUasSY",
+      token: token!,
     });
 
     return books;
@@ -52,12 +58,17 @@ export default function BooksPage() {
       queryKey: ["books"],
       refetchOnWindowFocus: false,
       retry: false,
+      enabled: !!token,
     });
 
   useMemo(() => {
     setCurrentPage(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, statusFilter]);
+
+  if (authLoading) {
+    return <BookListSkeleton />;
+  }
 
   const getPageNumbers = () => {
     if (!data) return [];
@@ -89,24 +100,6 @@ export default function BooksPage() {
 
     return pageNumbers;
   };
-
-  const BookListSkeleton = () => (
-    <div className="space-y-4">
-      {[...Array(6)].map((_, i) => (
-        <div key={i} className="flex gap-4 p-4 border rounded-md">
-          <Skeleton className="h-24 w-16 rounded" />
-          <div className="flex-1 space-y-2">
-            <Skeleton className="h-6 w-3/4" />
-            <Skeleton className="h-4 w-1/2" />
-            <div className="flex justify-between pt-2">
-              <Skeleton className="h-4 w-1/4" />
-              <Skeleton className="h-4 w-1/4" />
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
 
   return (
     <div className="container py-8 pl-12">

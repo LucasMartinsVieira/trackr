@@ -1,0 +1,118 @@
+"use client";
+
+import type React from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { checkAuthStatus, getAuthToken } from "@/app/actions/auth";
+
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  role?: string;
+};
+
+type AuthContextType = {
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  error: string | null;
+  isLoggedIn: boolean;
+  setUser: (user: User | null) => void;
+  setToken: (token: string | null) => void;
+  setError: (error: string | null) => void;
+  setLoggedIn: (status: boolean) => void;
+};
+
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  token: null,
+  loading: true,
+  error: null,
+  isLoggedIn: false,
+  setUser: () => {},
+  setToken: () => {},
+  setError: () => {},
+  setLoggedIn: () => {},
+});
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const router = useRouter();
+
+  // const getToken = async () => {
+  //   "use server";
+  //   const cookieStore = await cookies();
+  //
+  //   const token = cookieStore.get("auth-token");
+  //
+  //   if (!token) return null;
+  //
+  //   return token.value;
+  // };
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const token = await getAuthToken();
+      console.log("LOGANDO TOKEN", token);
+
+      if (token) {
+        setToken(token);
+      }
+
+      try {
+        const response = await fetch("http://localhost:3000/auth/api/session", {
+          method: "GET",
+        });
+        console.log("DENTRO DO USE EFFECT");
+        if (response.ok) {
+          const data = await response.json();
+          console.log("LOGANDO DATA", data);
+
+          if (data.user) {
+            setUser(data.user);
+          }
+          // if (data.token) {
+          //   setToken(data.token);
+          // }
+        }
+      } catch (error) {
+        console.error("Failed to fetch session:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchAuthStatus = async () => {
+      const status = await checkAuthStatus();
+      setLoggedIn(status);
+    };
+
+    checkSession();
+    fetchAuthStatus();
+  }, []);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        loading,
+        error,
+        isLoggedIn,
+        setUser,
+        setToken,
+        setError,
+        setLoggedIn,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export const useAuthContext = () => useContext(AuthContext);

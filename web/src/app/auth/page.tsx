@@ -18,7 +18,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useFormStatus } from "react-dom";
 import { LoginFormState, RegisterFormState } from "@/app/lib/definitions";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "@/components/providers/auth-provider";
 
 export default function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);

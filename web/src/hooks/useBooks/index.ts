@@ -61,8 +61,6 @@ export function useBooks() {
   async function addBook(props: PropsAddBook) {
     const { token: authorization } = props;
 
-    console.log("No hook");
-
     const req = await fetch(`/api/books`, {
       method: "POST",
       headers: { authorization },

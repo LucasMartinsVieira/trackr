@@ -207,10 +207,6 @@ export async function saveBook({
     reading_status: status,
   };
 
-  // In a real implementation, this would be a POST request to your API
-  console.log("Book data to save:", bookData);
-
-  // For now, we'll just return a mock response
   return {
     success: true,
     message: `Book "${edition.title}" saved as "${status}"!`,

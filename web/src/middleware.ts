@@ -5,11 +5,23 @@ export async function middleware(request: NextRequest) {
 
   const token = request.cookies.get("auth-token");
 
-  const protectedRoutes = ["/books"];
+  const protectedRoutes = ["/books", "/books/new"];
 
   if (protectedRoutes.some((route) => pathname.startsWith(route)) && !token) {
-    return NextResponse.redirect(new URL("/auth", request.url));
+    const url = new URL("/auth", request.url);
+
+    url.searchParams.set("callbackUrl", pathname);
+
+    return NextResponse.redirect(url);
+  }
+
+  if (pathname.startsWith("/auth") && token) {
+    return NextResponse.redirect(new URL("/books", request.url));
   }
 
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: ["/books", "/books/new", "/auth"],
+};

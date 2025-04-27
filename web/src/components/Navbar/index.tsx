@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 import { Book, Home, LogOut, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logout } from "@/app/actions/auth";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuthContext } from "../providers/auth-provider";
 
 export default function Navbar() {
   const pathname = usePathname();

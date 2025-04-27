@@ -11,15 +11,18 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Calendar, Clock, Heart, Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { parseISO, format, differenceInDays } from "date-fns";
+import { useAuthContext } from "@/components/providers/auth-provider";
 
 export default function BookDetailPage({ params }: { params: { id: string } }) {
   const { push } = useRouter();
   const { getBookById } = useBooks();
 
+  const { token } = useAuthContext();
+
   const fetchBookById = async () => {
+    if (!token) return;
     const book = getBookById({
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0cmFja3ItYXBpIiwic3ViIjoibHVjYXNAZW1haWwuY29tIiwiZXhwIjoxNzQ1Mjg3OTExfQ.17CjzYqnyhf94AcWAA2uM26fJvzuUqze-N74uQUasSY",
+      token,
       book: params.id,
     });
     return book;

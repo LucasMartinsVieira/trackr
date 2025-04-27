@@ -45,6 +45,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useBooks } from "@/hooks/useBooks";
+import { useAuthContext } from "@/components/providers/auth-provider";
 
 // API functions
 const searchBooks = async ({ query, searchType, page = 1, limit = 10 }) => {
@@ -91,6 +92,8 @@ export default function NewBookPage() {
   const [isSearchSubmitted, setIsSearchSubmitted] = useState(false);
 
   const { addBook } = useBooks();
+
+  const { token } = useAuthContext();
 
   // In the NewBookPage component, add these new state variables
   const router = useRouter();
@@ -359,6 +362,8 @@ export default function NewBookPage() {
     // Close the modal
     setShowConfirmation(false);
 
+    if (!token) return;
+
     await addBook({
       title: bookToSave.title,
       subtitle: bookToSave.subtitle,
@@ -372,8 +377,7 @@ export default function NewBookPage() {
       isbn_13: bookToSave.isbn_13,
       cover_url: bookToSave.cover_url,
       openLibraryId: bookToSave.openlibraryId,
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0cmFja3ItYXBpIiwic3ViIjoibHVjYXNAZW1haWwuY29tIiwiZXhwIjoxNzQ1Mjg4MzUxfQ.Fz8Twk6G9lkZRdeJHbpkznaVpLagiiJAlMSCxEqarfE",
+      token,
     });
 
     // Navigate to the books page

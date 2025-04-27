@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { Button } from "@/components/ui/button";
 import { Book } from "lucide-react";
-import Link from "next/link";
 
 export default function Home() {
   return (
@@ -20,10 +20,10 @@ export default function Home() {
             size="lg"
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
-            <Link href="/books">Browse Books</Link>
+            <a href="/books">Browse Books</a>
           </Button>
           <Button asChild variant="outline" size="lg">
-            <Link href="/auth">Get started</Link>
+            <a href="/auth">Get started</a>
           </Button>
         </div>
       </div>
