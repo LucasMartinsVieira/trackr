@@ -9,12 +9,13 @@ import { useBooks } from "@/hooks/useBooks";
 import { ListBookContent } from "@/types/book";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Calendar, Clock, Heart, Star } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { parseISO, format, differenceInDays } from "date-fns";
 import { useAuthContext } from "@/components/providers/auth-provider";
 
-export default function BookDetailPage({ params }: { params: { id: string } }) {
+export default function BookDetailPage() {
   const { push } = useRouter();
+  const { id } = useParams<{ id: string }>();
   const { getBookById } = useBooks();
 
   const { token } = useAuthContext();
@@ -23,7 +24,7 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
     if (!token) return;
     const book = getBookById({
       token,
-      book: params.id,
+      book: id,
     });
     return book;
   };
@@ -35,9 +36,10 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
     error,
   } = useQuery<ListBookContent>({
     queryFn: fetchBookById,
-    queryKey: ["book"],
+    queryKey: ["book", id],
     refetchOnWindowFocus: false,
     retry: false,
+    enabled: !!id && !!token, // only fetch if id and token are available
   });
 
   let readingDuration = null;
@@ -256,7 +258,9 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
                 Publish Date
               </p>
               <p>
-                {format(parseISO(book.publishDate.toString()), "dd/MM/yyyy")}
+                {book.publishDate
+                  ? format(parseISO(book.publishDate.toString()), "dd/MM/yyyy")
+                  : "Not informed"}
               </p>
             </div>
 
