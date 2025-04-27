@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useBooks } from "@/hooks/useBooks";
 import { ListBookContent } from "@/types/book";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Calendar, Clock, Heart, Star } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Heart, Star, Pencil } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { parseISO, format, differenceInDays } from "date-fns";
 import { useAuthContext } from "@/components/providers/auth-provider";
@@ -200,7 +200,14 @@ export default function BookDetailPage() {
             Back to Books
           </p>
         </Button>
-        <h1 className="text-3xl font-bold">{book.title}</h1>
+        <div className="flex flex-row items-center  gap-3">
+          <h1 className="text-3xl font-bold">{book.title}</h1>
+          <Pencil
+            key={book.id}
+            onClick={() => push(`/books/edit/${id}`)}
+            className="cursor-pointer"
+          />
+        </div>
         {book.subtitle && (
           <p className="text-xl text-muted-foreground">{book.subtitle}</p>
         )}
