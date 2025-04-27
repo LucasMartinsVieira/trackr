@@ -40,8 +40,6 @@ export default function BooksPage() {
 
   const { token, loading: authLoading } = useAuthContext();
 
-  console.log("LOGANDO TOKEN", token);
-
   const fetchBooks = async () => {
     // if (!token) return;
 

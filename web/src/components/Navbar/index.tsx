@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 "use client";
 import Link from "next/link";
 import {
@@ -36,16 +37,16 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
-        <Link href="/" className="flex items-center gap-2 mx-4">
+        <a href="/" className="flex items-center gap-2 mx-4">
           <Book className="h-6 w-6 text-primary" />
           <span className="font-bold text-xl">Trackr</span>
-        </Link>
+        </a>
         <nav className="ml-auto flex items-center gap-4">
           {isLoggedIn ? (
             <>
               <div className="hidden md:flex items-center gap-6">
                 {routes.map((route) => (
-                  <Link
+                  <a
                     key={route.href}
                     href={route.href}
                     className={cn(
@@ -54,7 +55,7 @@ export default function Navbar() {
                     )}
                   >
                     {route.label}
-                  </Link>
+                  </a>
                 ))}
               </div>
               <div className="md:hidden">
@@ -67,13 +68,13 @@ export default function Navbar() {
                   <DropdownMenuContent align="end">
                     {routes.map((route) => (
                       <DropdownMenuItem key={route.href} asChild>
-                        <Link
+                        <a
                           href={route.href}
                           className="flex items-center gap-2"
                         >
                           <route.icon className="h-4 w-4" />
                           {route.label}
-                        </Link>
+                        </a>
                       </DropdownMenuItem>
                     ))}
                     <form action={logout} className="w-full">
@@ -103,7 +104,7 @@ export default function Navbar() {
             </>
           ) : (
             <Button asChild variant="default">
-              <Link href="/auth">Login</Link>
+              <a href="/auth">Login</a>
             </Button>
           )}
         </nav>

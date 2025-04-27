@@ -58,7 +58,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const checkSession = async () => {
       const token = await getAuthToken();
-      console.log("LOGANDO TOKEN", token);
 
       if (token) {
         setToken(token);
@@ -68,10 +67,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const response = await fetch("http://localhost:3000/auth/api/session", {
           method: "GET",
         });
-        console.log("DENTRO DO USE EFFECT");
         if (response.ok) {
           const data = await response.json();
-          console.log("LOGANDO DATA", data);
 
           if (data.user) {
             setUser(data.user);
