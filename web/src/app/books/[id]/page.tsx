@@ -8,7 +8,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useBooks } from "@/hooks/useBooks";
 import { ListBookContent } from "@/types/book";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Calendar, Clock, Heart, Star, Pencil } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  Clock,
+  Heart,
+  Star,
+  Pencil,
+  Book,
+} from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { parseISO, format, differenceInDays } from "date-fns";
 import { useAuthContext } from "@/components/providers/auth-provider";
@@ -16,7 +24,7 @@ import { useAuthContext } from "@/components/providers/auth-provider";
 export default function BookDetailPage() {
   const { push } = useRouter();
   const { id } = useParams<{ id: string }>();
-  const { getBookById } = useBooks();
+  const { getBookById, changeBookStatus } = useBooks();
 
   const { token } = useAuthContext();
 
@@ -34,6 +42,7 @@ export default function BookDetailPage() {
     isLoading,
     isError,
     error,
+    refetch,
   } = useQuery<ListBookContent>({
     queryFn: fetchBookById,
     queryKey: ["book", id],
@@ -200,17 +209,27 @@ export default function BookDetailPage() {
             Back to Books
           </p>
         </Button>
-        <div className="flex flex-row items-center  gap-3">
-          <h1 className="text-3xl font-bold">{book.title}</h1>
-          <Pencil
-            key={book.id}
-            onClick={() => push(`/books/edit/${id}`)}
-            className="cursor-pointer"
-          />
+        <div className="space-y-2">
+          <div className="flex flex-row items-center gap-2">
+            <h1 className="text-3xl font-bold">{book.title}</h1>
+            <Pencil
+              key={book.id}
+              onClick={() => push(`/books/edit/${id}`)}
+              className="cursor-pointer"
+            />
+          </div>
+          <div>
+            {book.subtitle && (
+              <p className="text-xl text-muted-foreground">{book.subtitle}</p>
+            )}
+
+            {book.authors.length > 0 && (
+              <p className="text-xl text-muted-foreground">
+                {book.authors.join(", ")}
+              </p>
+            )}
+          </div>
         </div>
-        {book.subtitle && (
-          <p className="text-xl text-muted-foreground">{book.subtitle}</p>
-        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8">
@@ -253,13 +272,6 @@ export default function BookDetailPage() {
 
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">
-                Authors
-              </p>
-              <p>{book.authors.join(", ")}</p>
-            </div>
-
             <div className="space-y-1">
               <p className="text-sm font-medium text-muted-foreground">
                 Publish Date
@@ -315,6 +327,16 @@ export default function BookDetailPage() {
             </div>
 
             <div className="space-y-1">
+              <p className="text-sm font-medium text-muted-foreground">
+                Book Type
+              </p>
+              <div className="flex items-center">
+                <Book className="h-4 w-4 mr-1.5" />
+                <p>{book.type.toLowerCase()}</p>
+              </div>
+            </div>
+
+            <div className="space-y-1">
               <p className="text-sm font-medium text-muted-foreground">Loved</p>
               <div className="flex items-center">
                 {book.loved ? (
@@ -329,6 +351,29 @@ export default function BookDetailPage() {
                   </>
                 )}
               </div>
+            </div>
+
+            <div className="">
+              <Button
+                size="lg"
+                variant="default"
+                onClick={() => {
+                  if (!token) return;
+                  changeBookStatus(book.id, { token });
+                  refetch();
+                }}
+                disabled={
+                  book.status === "COMPLETE" ||
+                  book.status === "DROPPED" ||
+                  book.status === "PAUSED"
+                }
+              >
+                {book.status === "TO_READ"
+                  ? "Start Reading"
+                  : book.status === "READING"
+                    ? "Mark as Complete"
+                    : book.status}
+              </Button>
             </div>
           </div>
 

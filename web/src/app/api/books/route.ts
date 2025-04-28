@@ -65,3 +65,25 @@ export async function PUT(request: NextRequest) {
 
   return NextResponse.json(res);
 }
+
+export async function PATCH(request: NextRequest) {
+  const headersList = await headers();
+
+  const token = headersList.get("authorization");
+
+  const { searchParams } = new URL(request.url);
+
+  const id = searchParams.get("bookId");
+
+  const req = await fetch(`${baseUrlApi()}/books/changeStatus/${id}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      accept: "*/*",
+    },
+  });
+
+  const res = await req.json();
+
+  return NextResponse.json(res);
+}

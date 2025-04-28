@@ -128,5 +128,18 @@ export function useBooks() {
     return res;
   }
 
-  return { listBooks, getBookById, addBook, updateBook };
+  async function changeBookStatus(id: string, props: Props) {
+    const { token: authorization } = props;
+
+    const req = await fetch(`/api/books?bookId=${id}`, {
+      method: "PATCH",
+      headers: { authorization },
+    });
+
+    const res = await req.json();
+
+    return res;
+  }
+
+  return { listBooks, getBookById, addBook, updateBook, changeBookStatus };
 }
