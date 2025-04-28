@@ -86,68 +86,70 @@ export default function AuthPage() {
                 </CardDescription>
               </CardHeader>
               <form action={loginAction}>
-                <CardContent className="space-y-4">
-                  {loginState.errors?._form && (
-                    <Alert variant="destructive" className="text-sm py-2">
-                      <AlertDescription>
-                        {loginState.errors._form[0]}
-                      </AlertDescription>
-                    </Alert>
-                  )}
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="m@example.com"
-                      aria-describedby="email-error"
-                    />
-                    {loginState.errors?.email && (
-                      <p id="email-error" className="text-sm text-red-500">
-                        {loginState.errors.email[0]}
-                      </p>
+                <div className="space-y-4">
+                  <CardContent className="space-y-4">
+                    {loginState.errors?._form && (
+                      <Alert variant="destructive" className="text-sm py-2">
+                        <AlertDescription>
+                          {loginState.errors._form[0]}
+                        </AlertDescription>
+                      </Alert>
                     )}
-                  </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
-                    <div className="relative">
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
                       <Input
-                        id="password"
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        aria-describedby="password-error"
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="m@example.com"
+                        aria-describedby="email-error"
                       />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4 text-muted-foreground" />
-                        ) : (
-                          <Eye className="h-4 w-4 text-muted-foreground" />
-                        )}
-                        <span className="sr-only">
-                          {showPassword ? "Hide password" : "Show password"}
-                        </span>
-                      </Button>
+                      {loginState.errors?.email && (
+                        <p id="email-error" className="text-sm text-red-500">
+                          {loginState.errors.email[0]}
+                        </p>
+                      )}
                     </div>
-                    {loginState.errors?.password && (
-                      <p id="password-error" className="text-sm text-red-500">
-                        {loginState.errors.password[0]}
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <SubmitButton>Sign In</SubmitButton>
-                </CardFooter>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="password">Password</Label>
+                      <div className="relative">
+                        <Input
+                          id="password"
+                          name="password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          aria-describedby="password-error"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4 text-muted-foreground" />
+                          ) : (
+                            <Eye className="h-4 w-4 text-muted-foreground" />
+                          )}
+                          <span className="sr-only">
+                            {showPassword ? "Hide password" : "Show password"}
+                          </span>
+                        </Button>
+                      </div>
+                      {loginState.errors?.password && (
+                        <p id="password-error" className="text-sm text-red-500">
+                          {loginState.errors.password[0]}
+                        </p>
+                      )}
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <SubmitButton>Sign In</SubmitButton>
+                  </CardFooter>
+                </div>
               </form>
             </Card>
           </TabsContent>
@@ -161,130 +163,132 @@ export default function AuthPage() {
                 </CardDescription>
               </CardHeader>
               <form action={registerAction}>
-                <CardContent className="space-y-4">
-                  {registerState.errors?._form && (
-                    <Alert variant="destructive" className="text-sm py-2">
-                      <AlertDescription>
-                        {registerState.errors._form[0]}
-                      </AlertDescription>
-                    </Alert>
-                  )}
-
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      placeholder="John Doe"
-                      aria-describedby="name-error"
-                    />
-                    {registerState.errors?.name && (
-                      <p id="name-error" className="text-sm text-red-500">
-                        {registerState.errors.name[0]}
-                      </p>
+                <div className="space-y-4">
+                  <CardContent className="space-y-4">
+                    {registerState.errors?._form && (
+                      <Alert variant="destructive" className="text-sm py-2">
+                        <AlertDescription>
+                          {registerState.errors._form[0]}
+                        </AlertDescription>
+                      </Alert>
                     )}
-                  </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="register-email">Email</Label>
-                    <Input
-                      id="register-email"
-                      name="email"
-                      type="email"
-                      placeholder="m@example.com"
-                      aria-describedby="register-email-error"
-                    />
-                    {registerState.errors?.email && (
-                      <p
-                        id="register-email-error"
-                        className="text-sm text-red-500"
-                      >
-                        {registerState.errors.email[0]}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="register-password">Password</Label>
-                    <div className="relative">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Name</Label>
                       <Input
-                        id="register-password"
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        aria-describedby="register-password-error"
+                        id="name"
+                        name="name"
+                        placeholder="John Doe"
+                        aria-describedby="name-error"
                       />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4 text-muted-foreground" />
-                        ) : (
-                          <Eye className="h-4 w-4 text-muted-foreground" />
-                        )}
-                        <span className="sr-only">
-                          {showPassword ? "Hide password" : "Show password"}
-                        </span>
-                      </Button>
+                      {registerState.errors?.name && (
+                        <p id="name-error" className="text-sm text-red-500">
+                          {registerState.errors.name[0]}
+                        </p>
+                      )}
                     </div>
-                    {registerState.errors?.password && (
-                      <p
-                        id="register-password-error"
-                        className="text-sm text-red-500"
-                      >
-                        {registerState.errors.password[0]}
-                      </p>
-                    )}
-                  </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
-                    <div className="relative">
+                    <div className="space-y-2">
+                      <Label htmlFor="register-email">Email</Label>
                       <Input
-                        id="confirm-password"
-                        name="confirmPassword"
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        aria-describedby="confirm-password-error"
+                        id="register-email"
+                        name="email"
+                        type="email"
+                        placeholder="m@example.com"
+                        aria-describedby="register-email-error"
                       />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                      >
-                        {showConfirmPassword ? (
-                          <EyeOff className="h-4 w-4 text-muted-foreground" />
-                        ) : (
-                          <Eye className="h-4 w-4 text-muted-foreground" />
-                        )}
-                        <span className="sr-only">
-                          {showConfirmPassword
-                            ? "Hide password"
-                            : "Show password"}
-                        </span>
-                      </Button>
+                      {registerState.errors?.email && (
+                        <p
+                          id="register-email-error"
+                          className="text-sm text-red-500"
+                        >
+                          {registerState.errors.email[0]}
+                        </p>
+                      )}
                     </div>
-                    {registerState.errors?.confirmPassword && (
-                      <p
-                        id="confirm-password-error"
-                        className="text-sm text-red-500"
-                      >
-                        {registerState.errors.confirmPassword[0]}
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <SubmitButton>Create Account</SubmitButton>
-                </CardFooter>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="register-password">Password</Label>
+                      <div className="relative">
+                        <Input
+                          id="register-password"
+                          name="password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          aria-describedby="register-password-error"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4 text-muted-foreground" />
+                          ) : (
+                            <Eye className="h-4 w-4 text-muted-foreground" />
+                          )}
+                          <span className="sr-only">
+                            {showPassword ? "Hide password" : "Show password"}
+                          </span>
+                        </Button>
+                      </div>
+                      {registerState.errors?.password && (
+                        <p
+                          id="register-password-error"
+                          className="text-sm text-red-500"
+                        >
+                          {registerState.errors.password[0]}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="confirm-password">Confirm Password</Label>
+                      <div className="relative">
+                        <Input
+                          id="confirm-password"
+                          name="confirmPassword"
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          aria-describedby="confirm-password-error"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
+                        >
+                          {showConfirmPassword ? (
+                            <EyeOff className="h-4 w-4 text-muted-foreground" />
+                          ) : (
+                            <Eye className="h-4 w-4 text-muted-foreground" />
+                          )}
+                          <span className="sr-only">
+                            {showConfirmPassword
+                              ? "Hide password"
+                              : "Show password"}
+                          </span>
+                        </Button>
+                      </div>
+                      {registerState.errors?.confirmPassword && (
+                        <p
+                          id="confirm-password-error"
+                          className="text-sm text-red-500"
+                        >
+                          {registerState.errors.confirmPassword[0]}
+                        </p>
+                      )}
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <SubmitButton>Create Account</SubmitButton>
+                  </CardFooter>
+                </div>
               </form>
             </Card>
           </TabsContent>
