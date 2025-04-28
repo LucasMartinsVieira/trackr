@@ -1,3 +1,5 @@
+import { BookStatus } from "@/types/book";
+
 interface Props {
   token: string;
 }
@@ -17,6 +19,8 @@ export type ReadingStatus =
   | "PAUSED"
   | "DROPPED";
 
+export type BookTypes = "PAPERBACK" | "HARDCOVER" | "E_BOOK" | "AUDIOBOOK";
+
 interface PropsAddBook extends Props {
   openLibraryId: string;
   title: string;
@@ -29,6 +33,19 @@ interface PropsAddBook extends Props {
   number_of_pages: number;
   publishers: string[];
   reading_status: ReadingStatus;
+}
+
+interface PropsUpdateBook extends Props {
+  title: string;
+  subtitle: string;
+  numberOfPages: number;
+  isbn13: string;
+  status: BookStatus;
+  type: BookTypes;
+  notes: string;
+  loved: boolean;
+  dateStarted: string | undefined;
+  dateFinished: string | undefined;
 }
 
 export function useBooks() {
@@ -86,5 +103,30 @@ export function useBooks() {
     return res;
   }
 
-  return { listBooks, getBookById, addBook };
+  async function updateBook(id: string, props: PropsUpdateBook) {
+    const { token: authorization } = props;
+
+    const req = await fetch(`/api/books?bookId=${id}`, {
+      method: "PUT",
+      headers: { authorization },
+      body: JSON.stringify({
+        title: props.title,
+        subtitle: props.subtitle,
+        isbn13: props.isbn13,
+        numberOfPages: props.numberOfPages,
+        notes: props.notes,
+        type: props.type,
+        status: props.status,
+        dateFinished: props.dateStarted,
+        dateStarted: props.dateStarted,
+        loved: props.loved,
+      }),
+    });
+
+    const res = await req.json();
+
+    return res;
+  }
+
+  return { listBooks, getBookById, addBook, updateBook };
 }

@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { ArrowLeft, CalendarIcon, Image } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { useBooks } from "@/hooks/useBooks";
+import { BookTypes, useBooks } from "@/hooks/useBooks";
 import { useAuthContext } from "@/components/providers/auth-provider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/sonner";
@@ -50,6 +50,7 @@ export default function EditBook() {
     queryKey: ["book", id],
     queryFn: async () => {
       if (!token || !id) return null;
+
       const data = await getBookById({ token, book: id });
       if (data) {
         if (data.dateStarted) setDateStarted(new Date(data.dateStarted));
@@ -60,8 +61,6 @@ export default function EditBook() {
     },
     enabled: !!token && !!id,
   });
-
-  console.log(book);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,21 +73,16 @@ export default function EditBook() {
       numberOfPages: parseInt(formData.get("numberOfPages") as string),
       isbn13: formData.get("isbn13") as string,
       status: formData.get("status") as BookStatus,
-      type: formData.get("type") as string,
+      type: formData.get("type") as BookTypes,
       notes: formData.get("notes") as string,
       loved,
       dateStarted: dateStarted?.toISOString(),
       dateFinished: dateFinished?.toISOString(),
+      token,
     };
 
-    console.log("UPDATED BOOK", updatedBook);
-
     try {
-      await updateBook({
-        token,
-        bookId: id,
-        ...updatedBook,
-      });
+      await updateBook(id, updatedBook);
       toast.success("Book updated successfully");
       push(`/books/${id}`);
     } catch (error) {

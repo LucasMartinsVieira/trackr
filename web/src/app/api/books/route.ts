@@ -40,3 +40,28 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(res);
 }
+
+export async function PUT(request: NextRequest) {
+  const headersList = await headers();
+
+  const token = headersList.get("authorization");
+  const data = await request.json();
+
+  const { searchParams } = new URL(request.url);
+
+  const id = searchParams.get("bookId");
+
+  const req = await fetch(`${baseUrlApi()}/books/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${token}`,
+      accept: "*/*",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const res = await req.json();
+
+  return NextResponse.json(res);
+}
