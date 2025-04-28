@@ -106,7 +106,7 @@ export async function register(
     console.log(error);
     return {
       errors: {
-        _form: ["An unexpected error occurred. Please try again. BOLOLO"],
+        _form: ["An unexpected error occurred. Please try again."],
       },
       success: false,
     };

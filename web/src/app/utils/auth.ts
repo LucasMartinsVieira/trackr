@@ -1,3 +1,5 @@
+import { baseUrlApi } from "./url";
+
 interface IRegisterUser {
   name: string;
   email: string;
@@ -5,9 +7,7 @@ interface IRegisterUser {
 }
 
 export async function registerUser({ name, email, password }: IRegisterUser) {
-  // TODO: use next router when possible
-  // const req = await fetch("/auth/api/register", {
-  const req = await fetch(`http://localhost:3000/auth/api/register`, {
+  const req = await fetch(`${baseUrlApi()}/auth/register`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
@@ -25,7 +25,7 @@ export async function loginUser({
   email,
   password,
 }: Omit<IRegisterUser, "name">) {
-  const req = await fetch(`http://localhost:3000/auth/api/login`, {
+  const req = await fetch(`${baseUrlApi()}/auth/login`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",

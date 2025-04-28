@@ -4,6 +4,7 @@ import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { checkAuthStatus, getAuthToken } from "@/app/actions/auth";
+import { baseUrlApi } from "@/app/utils/url";
 
 type User = {
   id: string;
@@ -42,18 +43,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const router = useRouter();
-
-  // const getToken = async () => {
-  //   "use server";
-  //   const cookieStore = await cookies();
-  //
-  //   const token = cookieStore.get("auth-token");
-  //
-  //   if (!token) return null;
-  //
-  //   return token.value;
-  // };
 
   useEffect(() => {
     const checkSession = async () => {
@@ -64,8 +53,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       try {
-        const response = await fetch("http://localhost:3000/auth/api/session", {
+        const response = await fetch(`${baseUrlApi()}/auth/me`, {
           method: "GET",
+          cache: "no-store",
         });
         if (response.ok) {
           const data = await response.json();
@@ -73,9 +63,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (data.user) {
             setUser(data.user);
           }
-          // if (data.token) {
-          //   setToken(data.token);
-          // }
         }
       } catch (error) {
         console.error("Failed to fetch session:", error);
