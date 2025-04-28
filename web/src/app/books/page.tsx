@@ -1,19 +1,9 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Filter, Plus, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { useState, useMemo } from "react";
-import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmptyBooks } from "@/components/Books/empty-books";
 import { BooksList } from "@/components/Books/books-list";
 import {
@@ -27,13 +17,11 @@ import {
 } from "@/components/ui/pagination";
 import { useBooks } from "@/hooks/useBooks";
 import { useQuery } from "@tanstack/react-query";
-import { BookStatus, ListBooksUseQueryInterface } from "@/types/book";
+import { ListBooksUseQueryInterface } from "@/types/book";
 import { useAuthContext } from "@/components/providers/auth-provider";
 import BookListSkeleton from "@/components/Books/book-list-skeleton";
 
 export default function BooksPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<BookStatus>("COMPLETE");
   const [currentPage, setCurrentPage] = useState(1);
   const { listBooks } = useBooks();
   const { push } = useRouter();
@@ -50,7 +38,7 @@ export default function BooksPage() {
     return books;
   };
 
-  const { data, isLoading, isError, error, refetch } =
+  const { data, isLoading, isError, error } =
     useQuery<ListBooksUseQueryInterface>({
       queryFn: fetchBooks,
       queryKey: ["books"],
@@ -62,7 +50,7 @@ export default function BooksPage() {
   useMemo(() => {
     setCurrentPage(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, statusFilter]);
+  }, []);
 
   if (authLoading) {
     return <BookListSkeleton />;
@@ -105,63 +93,6 @@ export default function BooksPage() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h1 className="text-3xl font-bold">My Books </h1>
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <div className="relative w-full sm:w-auto">
-              <Search className="absolute left-2.5 top-2.5 h-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search books..."
-                className="w-full sm:w-[250px] pl-8 "
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Filter className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>Filter My Status</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem
-                  checked={statusFilter === "COMPLETE"}
-                  onCheckedChange={() => setStatusFilter("COMPLETE")}
-                >
-                  Completed
-                </DropdownMenuCheckboxItem>
-
-                <DropdownMenuCheckboxItem
-                  checked={statusFilter === "READING"}
-                  onCheckedChange={() => setStatusFilter("READING")}
-                >
-                  Reading
-                </DropdownMenuCheckboxItem>
-
-                <DropdownMenuCheckboxItem
-                  checked={statusFilter === "TO_READ"}
-                  onCheckedChange={() => setStatusFilter("TO_READ")}
-                >
-                  To Read
-                </DropdownMenuCheckboxItem>
-
-                <DropdownMenuCheckboxItem
-                  checked={statusFilter === "PAUSED"}
-                  onCheckedChange={() => setStatusFilter("PAUSED")}
-                >
-                  Paused
-                </DropdownMenuCheckboxItem>
-
-                <DropdownMenuCheckboxItem
-                  checked={statusFilter === "DROPPED"}
-                  onCheckedChange={() => setStatusFilter("DROPPED")}
-                >
-                  Dropped
-                </DropdownMenuCheckboxItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
             <Button
               className="bg-primary hover:bg-primary/90 text-white"
               asChild
@@ -175,60 +106,29 @@ export default function BooksPage() {
           </div>
         </div>
 
-        <Tabs
-          defaultValue="complete"
-          className="w-full"
-          onValueChange={(value) => {
-            if (value === "complete") setStatusFilter("COMPLETE");
-            else if (value === "reading") setStatusFilter("READING");
-            else if (value === "to-read") setStatusFilter("TO_READ");
-            else if (value === "paused") setStatusFilter("PAUSED");
-            else if (value === "dropped") setStatusFilter("DROPPED");
-            setCurrentPage(1);
-          }}
-          value={
-            statusFilter === "COMPLETE"
-              ? "complete"
-              : statusFilter === "READING"
-                ? "reading"
-                : statusFilter === "TO_READ"
-                  ? "to-read"
-                  : statusFilter === "PAUSED"
-                    ? "paused"
-                    : "dropped"
-          }
-        >
-          <TabsList className="grid grid-cols-5 w-full">
-            <TabsTrigger value="complete">Completed</TabsTrigger>
-            <TabsTrigger value="reading">Reading</TabsTrigger>
-            <TabsTrigger value="to-read">To Read</TabsTrigger>
-            <TabsTrigger value="paused">Paused</TabsTrigger>
-            <TabsTrigger value="dropped">Dropped</TabsTrigger>
-          </TabsList>
-
-          <div className="mt-6">
-            {isLoading ? (
-              <BookListSkeleton />
-            ) : isError ? (
-              <div className="py-12 text-center">
-                <p className="text-red-500">
-                  Error loading books: {(error as Error).message}
-                </p>
-                <Button
-                  variant="outline"
-                  className="mt-4"
-                  onClick={() => window.location.reload()}
-                >
-                  Try Again
-                </Button>
-              </div>
-            ) : data?.content.length === 0 ? (
-              <EmptyBooks />
-            ) : (
-              <BooksList books={data?.content || []} />
-            )}
-          </div>
-        </Tabs>
+        <div className="mt-6">
+          {isLoading ? (
+            <BookListSkeleton />
+          ) : isError ? (
+            <div className="py-12 text-center">
+              <p className="text-red-500">
+                Error loading books: {(error as Error).message}
+              </p>
+              <Button
+                variant="outline"
+                className="mt-4"
+                onClick={() => window.location.reload()}
+              >
+                {" "}
+                Try Again{" "}
+              </Button>{" "}
+            </div>
+          ) : data?.content.length === 0 ? (
+            <EmptyBooks />
+          ) : (
+            <BooksList books={data?.content || []} />
+          )}
+        </div>
 
         {data && data.totalPages > 1 && (
           <Pagination className="mt-6">
