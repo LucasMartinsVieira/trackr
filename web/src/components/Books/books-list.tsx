@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { cn } from "@/lib/utils";
 import { ListBookContent } from "@/types/book";
 import { Heart, Star } from "lucide-react";

@@ -49,7 +49,6 @@ export default function BooksPage() {
 
   useMemo(() => {
     setCurrentPage(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (authLoading) {

@@ -2,7 +2,6 @@
 
 import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { checkAuthStatus, getAuthToken } from "@/app/actions/auth";
 import { baseUrlApi } from "@/app/utils/url";
 

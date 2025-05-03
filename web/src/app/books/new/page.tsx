@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -691,7 +692,9 @@ export default function NewBookPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Editions of "{selectedWork?.title}"</CardTitle>
+              <CardTitle>
+                Editions of &quot;{selectedWork?.title}&quot;
+              </CardTitle>
               <CardDescription>
                 {isEditionsLoading
                   ? "Loading editions..."
@@ -826,7 +829,8 @@ export default function NewBookPage() {
             <CardHeader>
               <CardTitle>How would you like to save this book?</CardTitle>
               <CardDescription>
-                Select the reading status for "{selectedEdition.title}"
+                Select the reading status for &quot;{selectedEdition.title}
+                &quot;
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -890,8 +894,8 @@ export default function NewBookPage() {
           <DialogHeader>
             <DialogTitle>Confirm Book Addition</DialogTitle>
             <DialogDescription>
-              Are you sure you want to add "{bookToSave?.title}" to your{" "}
-              {readingStatus} list?
+              Are you sure you want to add &quot;{bookToSave?.title}&quot; to
+              your {readingStatus} list?
             </DialogDescription>
           </DialogHeader>
           <div className="flex items-center gap-4 py-4">

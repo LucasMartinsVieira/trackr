@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -144,6 +145,7 @@ export default function EditBook() {
                 </div>
               ) : (
                 <div className="flex-shrink-0 flex items-center justify-center w-32 h-44 bg-muted rounded-md">
+                  {/* eslint-disable-next-line jsx-a11y/alt-text */}
                   <Image className="h-10 w-10 text-muted-foreground" />
                 </div>
               )}

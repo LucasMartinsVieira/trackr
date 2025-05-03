@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // API functions for book search and management
 
 /**
@@ -64,7 +65,7 @@ export async function fetchEditions({
 export function extractAuthorNames(edition: any): string[] {
   // If edition has authors array with objects containing name property
   if (edition.authors && Array.isArray(edition.authors)) {
-    return edition.authors.map((author) => {
+    return edition.authors.map((author: any) => {
       // Handle both {name: "Author Name"} and "Author Name" formats
       return typeof author === "object" && author !== null
         ? author.name || "Unknown Author"
