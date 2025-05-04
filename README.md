@@ -30,6 +30,25 @@ To run the full application with Docker:
 docker compose up --build
 ```
 
+
+Before doing so, make sure to create a `.env` file in the project root with the following content:
+
+```env
+# PostgreSQL Configuration
+POSTGRES_DB=trackr-db
+POSTGRES_USER=trackr-user
+POSTGRES_PASSWORD=trackr-password
+
+# Java Backend Configuration
+DB_URL=jdbc:postgresql://db:5432/trackr-db
+JWT_SECRET=secret
+
+# Frontend Configuration
+NEXT_PUBLIC_API_URL=http://0.0.0.0:8080
+```
+
+> These environment variables are used to configure the PostgreSQL container, the Spring Boot backend, and the frontend API integration.
+
 ## 📸 Feature Walkthroughs (Videos)
 
 - 📝 Adding a Book
