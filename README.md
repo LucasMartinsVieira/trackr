@@ -44,10 +44,6 @@ docker compose up --build
 - ✍️ Book Edit Page
 ![Book Edit Page](./.github/assets/page-edit.gif)
 
-## 📬 Contact
+---
 
-Have questions or want to discuss the code?
-
-- 📧 [Email](mailto:lucasmartvieira03@outlook.com)
-- 💼 [LinkedIn](https://www.linkedin.com/in/lucas-martins-vieira/)
-- 🐙 [Github](https://www.github.com/LucasMartinsVieira)
+Stay tuned for more updates and features in the next version!
